@@ -1,0 +1,50 @@
+version: "3.9"
+
+volumes:
+  postgres_data:
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fullstack_auth_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.envs/postgres.env
+    expose:
+      - "5432"
+    ports:
+      - "5433:5432"
+
+  django:
+    build:
+      context: ./core
+      dockerfile: ./docker/Dockerfile
+    container_name: fullstack_auth_django
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  react:
+    build:
+      context: ./frontend
+      dockerfile: ./docker/Dockerfile
+    container_name: fullstack_auth_react
+    environment:
+      - NODE_ENV=development
+      - TAILWIND_MODE=watch
+      - WDS_SOCKET_HOST=127.0.0.1
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
