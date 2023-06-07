@@ -44,6 +44,6 @@ fi
 echo "Continuing with the execution."
 
 echo "========== DJANGO RUNSERVER =========="
-python manage.py runserver 0.0.0.0:8000
+python manage.py runserver_plus 0.0.0.0:8000
 
 exec "$@"

@@ -2,6 +2,7 @@ version: "3.9"
 
 volumes:
   postgres_data:
+  smtp_data:
 
 services:
   postgres:
@@ -32,6 +33,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - smtp
 
   celery-beat:
     build:
@@ -100,3 +102,12 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+
+  smtp:
+    image: rnwood/smtp4dev
+    container_name: fullstack_auth_smtp
+    ports:
+      - "5000:80"
+      - "2525:25"
+    volumes:
+      - smtp_data:/app/Smtp4dev/DB

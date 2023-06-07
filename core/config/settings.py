@@ -46,8 +46,8 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
-    "django_extensions",
     'django_filters',
+    "django_extensions",
 ]
 
 DEBUG_APPS = [
