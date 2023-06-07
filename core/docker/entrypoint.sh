@@ -6,48 +6,34 @@ set -o pipefail
 # exits if any of your variables is not set
 set -o nounset
 
-sleep 2
-
 export POSTGRES_HOST="${POSTGRES_HOST}"
 export POSTGRES_PORT="${POSTGRES_PORT}"
 export POSTGRES_DB="${POSTGRES_DB}"
 export POSTGRES_USER="${POSTGRES_USER}"
 export POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
 
-echo "========== DJANGO MIGRATIONS =========="
-python manage.py migrate
+postgres_ready() {
+python << END
+import sys
+import psycopg2
 
-echo "========== DJANGO SUPERUSER =========="
-admin_exists() {
-    python <<END
-import os
-import django
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-django.setup()
-
-from django.contrib.auth.models import User
-if User.objects.filter(is_superuser=True).exists():
-    print("True")
-else:
-    print("False")
+try:
+    conn = psycopg2.connect(
+        dbname="$POSTGRES_DB",
+        user="$POSTGRES_USER",
+        password="$POSTGRES_PASSWORD",
+        host="$POSTGRES_HOST",
+        port="$POSTGRES_PORT"
+    )
+except psycopg2.OperationalError:
+    sys.exit(-1)
+sys.exit(0)
 END
 }
+until postgres_ready; do
+    >&2 echo 'Waiting for PostgreSQL to become available...'
+    sleep 1
+done
+>&2 echo 'PostgreSQL is available'
 
-if [[ $(admin_exists) == "False" ]]; then
-    echo "Admin user does not exist. Creating..."
-    export DJANGO_SUPERUSER_USERNAME="${DJANGO_SUPERUSER_USERNAME}"
-    export DJANGO_SUPERUSER_EMAIL="${DJANGO_SUPERUSER_EMAIL}"
-    export DJANGO_SUPERUSER_PASSWORD="${DJANGO_SUPERUSER_PASSWORD}"
-    python manage.py createsuperuser \
-        --noinput \
-        --username "$DJANGO_SUPERUSER_USERNAME" \
-        --email "$DJANGO_SUPERUSER_EMAIL"
-else
-    echo "Admin user exists. No action required."
-fi
-
-echo "Continuing with the execution."
-
-echo "========== DJANGO RUNSERVER =========="
-python manage.py runserver 0.0.0.0:8000
+exec "$@"

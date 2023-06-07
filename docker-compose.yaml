@@ -20,6 +20,7 @@ services:
     build:
       context: ./core
       dockerfile: ./docker/Dockerfile
+    command: /django.sh
     container_name: fullstack_auth_django
     volumes:
       - ./core:/src:z
@@ -30,6 +31,58 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+      - redis
+
+  celery-beat:
+    build:
+      context: ./core
+      dockerfile: ./docker/Dockerfile
+    command: /celery/beat.sh
+    container_name: fullstack_auth_celery_beat
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+    depends_on:
+      - postgres
+      - redis
+
+  celery-worker:
+    build:
+      context: ./core
+      dockerfile: ./docker/Dockerfile
+    command: /celery/worker.sh
+    container_name: fullstack_auth_celery_worker
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+    depends_on:
+      - postgres
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: fullstack_auth_redis
+
+  flower:
+    build:
+      context: ./core
+      dockerfile: ./docker/Dockerfile
+    command: /celery/flower.sh
+    container_name: fullstack_auth_flower
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+    ports:
+      - "5555:5555"
+    depends_on:
+      - postgres
+      - redis
 
   react:
     build:
@@ -38,7 +91,6 @@ services:
     container_name: fullstack_auth_react
     environment:
       - NODE_ENV=development
-      - TAILWIND_MODE=watch
       - WDS_SOCKET_HOST=127.0.0.1
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true

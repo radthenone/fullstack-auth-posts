@@ -7,6 +7,10 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
 
 RUN pip install "poetry==$POETRY_VERSION"
 
+COPY ./docker/celery/* ./celery/
+RUN sed -i 's/\r$//g' celery/*.sh
+RUN chmod +x ./celery/*.sh
+
 WORKDIR /src
 COPY poetry.lock pyproject.toml ./
 
@@ -27,6 +31,10 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
     && rm -rf /wheels/
 
 COPY . /src
+
+
+COPY ./docker/django.sh /django.sh
+RUN sed -i 's/\r$//g' /django.sh && chmod +x /django.sh
 
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//g' /entrypoint.sh && chmod +x /entrypoint.sh
