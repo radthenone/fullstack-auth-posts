@@ -14,7 +14,7 @@ RUN chmod +x ./celery/*.sh
 WORKDIR /src
 COPY poetry.lock pyproject.toml ./
 
-COPY requirements.txt .
+RUN touch requirements.txt
 RUN poetry export --with dev -f requirements.txt --output requirements.txt
 RUN pip wheel --wheel-dir /usr/src/app/wheels  \
     -r requirements.txt && rm -rf $POETRY_CACHE_DIR

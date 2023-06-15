@@ -1,0 +1,68 @@
+from uuid import uuid4
+from django.db import models
+from apps.users.managers import CustomUserManager
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
+from apps.users.utils import avatar_upload_path
+
+
+# Create your models here.
+
+class User(AbstractUser):
+    BASIC = "BA"
+    PREMIUM = "PM"
+
+    TYPE_ROLES = [
+        (BASIC, _("Basic")),
+        (PREMIUM, _("Premium"))
+    ]
+    email = models.EmailField(
+        verbose_name="Email",
+        unique=True,
+    )
+
+    roles = models.CharField(
+        verbose_name="Roles",
+        choices=TYPE_ROLES,
+    )
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
+
+    @property
+    def username(self) -> str:
+        if not self.email:
+            return ''
+        else:
+            return self.email[0] + str(uuid4().hex)
+
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+
+    @classmethod
+    def get_full_name(cls) -> str:
+        return f'{cls.first_name} {cls.last_name}'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    avatar = models.ImageField(upload_to=avatar_upload_path, null=True, blank=True)
+    is_premium = models.BooleanField(default=False)
+    is_basic = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class UserPremium(Profile):
+    pass
+
+
+class UserBasic(Profile):
+    pass
