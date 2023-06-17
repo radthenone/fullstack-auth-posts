@@ -1,4 +1,5 @@
-from django.urls import include, path
+from typing import Any, Callable, List, Optional, Union
 
-urlpatterns = [
+urlpatterns: List[Union[str, Callable[..., Any], Optional[str]]] = [
+    # list of URL patterns here
 ]

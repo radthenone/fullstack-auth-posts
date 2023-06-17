@@ -7,6 +7,8 @@ set -o pipefail
 set -o nounset
 
 echo "Give app name if want delete app migrations or delete all"
+    echo "You can add app like:"
+    echo "./commands/dev/django_reset_migrations.sh <APP_NAME>"
 if [ -z "${1:-}" ]; then
     find . -path "*/migrations/*" -name "*.py" -not -path "*__init__*" -delete
     find . -path "*/migrations/*.pyc" -delete

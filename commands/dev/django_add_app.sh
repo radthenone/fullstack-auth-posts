@@ -6,12 +6,14 @@ set -o pipefail
 # exits if any of your variables is not set
 set -o nounset
 
+
 if [ -z "${1:-}" ]; then
-    echo "Give app name"
+    echo "Give app name in django directory"
+    echo "You can add app like:"
+    echo "./commands/dev/django_add_app.sh <APP_NAME>"
 else
     app_name="$1"
     echo "Start process $app_name"
-    cd core
     docker-compose exec -it django sh -c "python manage.py startapp $app_name;
     mv $app_name apps;
     rm -f $app_name
@@ -26,8 +28,10 @@ else
 file_name="urls.py"
 content=$(cat <<EOF
 from django.urls import include, path
+from typing import Any, Callable, List, Optional, Union
 
-urlpatterns = [
+urlpatterns: List[Union[str, Callable[..., Any], Optional[str]]] = [
+    # list of URL patterns here
 ]
 EOF
 )

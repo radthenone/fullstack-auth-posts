@@ -1,20 +1,17 @@
-from django.db import models
-from apps.users.managers import CustomUserManager
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from apps.users.utils import avatar_upload_path
 
-
 # Create your models here.
+
 
 class User(AbstractUser):
     BASIC = "BA"
     PREMIUM = "PM"
 
-    TYPE_ROLES = [
-        (BASIC, _("Basic")),
-        (PREMIUM, _("Premium"))
-    ]
+    TYPE_ROLES = [(BASIC, _("Basic")), (PREMIUM, _("Premium"))]
     username = models.CharField(
         max_length=150,
         default="",
@@ -32,18 +29,16 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
-    objects = CustomUserManager()
+    class Meta:
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
 
     def __str__(self):
         return self.email
 
-    class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
-
     @property
     def full_name(self) -> str:
-        return f'{self.first_name} {self.last_name}'
+        return f"{self.first_name} {self.last_name}"
 
 
 class Profile(models.Model):
@@ -55,10 +50,29 @@ class Profile(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.user.email
+
 
 class UserPremium(Profile):
-    pass
+    is_basic = models.BooleanField(default=False, editable=False)
+    is_premium = models.BooleanField(default=True, editable=False)
+
+    class Meta:
+        verbose_name = _("premium user")
+        verbose_name_plural = _("premium users")
+
+    def __str__(self):
+        return self.user.email
 
 
 class UserBasic(Profile):
-    pass
+    is_basic = models.BooleanField(default=True, editable=False)
+    is_premium = models.BooleanField(default=False, editable=False)
+
+    class Meta:
+        verbose_name = _("basic user")
+        verbose_name_plural = _("basic users")
+
+    def __str__(self):
+        return self.user.email

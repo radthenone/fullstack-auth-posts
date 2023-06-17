@@ -115,3 +115,26 @@ services:
       - "2525:25"
     volumes:
       - smtp_data:/app/Smtp4dev/DB
+
+  django-celery:
+    image: fullstack-auth-posts-django:latest
+    container_name: fullstack_auth_django_celery
+    command: >
+      bash -c "
+      /django.sh
+      "
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+      - ./.envs/email.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - celery-beat
+      - celery-worker
+      - flower
+      - smtp
