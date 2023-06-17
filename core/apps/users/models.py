@@ -1,4 +1,3 @@
-from uuid import uuid4
 from django.db import models
 from apps.users.managers import CustomUserManager
 from django.contrib.auth.models import AbstractUser
@@ -16,11 +15,15 @@ class User(AbstractUser):
         (BASIC, _("Basic")),
         (PREMIUM, _("Premium"))
     ]
+    username = models.CharField(
+        max_length=150,
+        default="",
+        unique=True,
+    )
     email = models.EmailField(
         verbose_name="Email",
         unique=True,
     )
-
     roles = models.CharField(
         verbose_name="Roles",
         choices=TYPE_ROLES,
@@ -34,20 +37,13 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
-    @property
-    def username(self) -> str:
-        if not self.email:
-            return ''
-        else:
-            return self.email[0] + str(uuid4().hex)
-
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    @classmethod
-    def get_full_name(cls) -> str:
-        return f'{cls.first_name} {cls.last_name}'
+    @property
+    def full_name(self) -> str:
+        return f'{self.first_name} {self.last_name}'
 
 
 class Profile(models.Model):
