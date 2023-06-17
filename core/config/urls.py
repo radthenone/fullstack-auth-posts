@@ -18,12 +18,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
-                                   SpectacularSwaggerView)
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 urlpatterns = [
     # ADMIN URLS
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     # REST URLS
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
@@ -37,7 +36,7 @@ urlpatterns = [
         name="api-docs",
     ),
     # APPS URLS
-    path('api/users/', include('apps.users.urls')),
+    path("api/users/", include("apps.users.urls")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

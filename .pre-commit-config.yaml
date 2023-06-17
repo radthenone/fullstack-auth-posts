@@ -28,7 +28,6 @@ repos:
       hooks:
           - id: isort
             files: ^core/
-            args: ["--settings-path=core/.isort.cfg"]
 
     - repo: https://github.com/PyCQA/flake8
       rev: 6.0.0
