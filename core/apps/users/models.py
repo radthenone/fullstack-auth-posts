@@ -1,7 +1,8 @@
-from apps.users.utils import avatar_upload_path
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from apps.users.utils import avatar_upload_path
 
 # Create your models here.
 

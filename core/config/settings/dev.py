@@ -1,7 +1,7 @@
 import socket
 
-from config.settings.base import *  # noqa
 from config.env import env
+from config.settings.base import *  # noqa
 
 # DEV
 # ------------------------------------------------------------------------------

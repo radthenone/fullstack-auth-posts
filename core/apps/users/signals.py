@@ -1,8 +1,9 @@
 from uuid import uuid4
 
-from apps.users.models import User
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+
+from apps.users.models import User
 
 
 @receiver(pre_save, sender=User)
