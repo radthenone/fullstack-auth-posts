@@ -1,9 +1,8 @@
-from django.db import models
-from apps.users.managers import CustomUserManager
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.utils.translation import gettext_lazy as _
-from apps.users.utils import avatar_upload_path
 
+from apps.users.utils import avatar_upload_path
 
 # Create your models here.
 
@@ -32,8 +31,6 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
-    objects = CustomUserManager()
-
     def __str__(self):
         return self.email
 
@@ -52,13 +49,18 @@ class Profile(models.Model):
     is_premium = models.BooleanField(default=False)
     is_basic = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.user.email
+
     class Meta:
         abstract = True
 
 
 class UserPremium(Profile):
-    pass
+    is_basic = models.BooleanField(default=False, editable=False)
+    is_premium = models.BooleanField(default=True, editable=False)
 
 
 class UserBasic(Profile):
-    pass
+    is_basic = models.BooleanField(default=True, editable=False)
+    is_premium = models.BooleanField(default=False, editable=False)

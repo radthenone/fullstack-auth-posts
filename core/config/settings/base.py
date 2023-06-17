@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import socket
-from config.env import env, BASE_DIR
+
+from config.env import BASE_DIR, env
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -90,6 +91,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASES = {'default': env.db('DATABASE_URL')}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

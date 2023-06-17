@@ -2,7 +2,6 @@ import socket
 
 from config.settings.base import *  # noqa
 
-
 # DEV
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
