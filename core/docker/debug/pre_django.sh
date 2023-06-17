@@ -19,7 +19,7 @@ if [ $PWD == "/src" ]; then
     echo "End flake8"
 
     echo "Run isort"
-    isort .
+    isort . --settings-path=isort.cfg
     echo "End isort"
 else
     echo "Wrong run"
