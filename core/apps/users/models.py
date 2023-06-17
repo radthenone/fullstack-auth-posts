@@ -6,14 +6,12 @@ from apps.users.utils import avatar_upload_path
 
 # Create your models here.
 
+
 class User(AbstractUser):
     BASIC = "BA"
     PREMIUM = "PM"
 
-    TYPE_ROLES = [
-        (BASIC, _("Basic")),
-        (PREMIUM, _("Premium"))
-    ]
+    TYPE_ROLES = [(BASIC, _("Basic")), (PREMIUM, _("Premium"))]
     username = models.CharField(
         max_length=150,
         default="",
@@ -35,12 +33,12 @@ class User(AbstractUser):
         return self.email
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
 
     @property
     def full_name(self) -> str:
-        return f'{self.first_name} {self.last_name}'
+        return f"{self.first_name} {self.last_name}"
 
 
 class Profile(models.Model):

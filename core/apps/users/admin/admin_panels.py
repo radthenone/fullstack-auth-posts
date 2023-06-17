@@ -8,14 +8,23 @@ from apps.users.models import Profile, User, UserBasic, UserPremium
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'password')
+    list_display = ("username", "email", "password")
 
 
 class CustomForBasicAndPremium(admin.ModelAdmin):
     list_display = (
-        'get_username', 'is_basic', 'is_premium', 'get_email', 'get_password', 'avatar',
+        "get_username",
+        "is_basic",
+        "is_premium",
+        "get_email",
+        "get_password",
+        "avatar",
     )
-    readonly_fields = ('get_username', 'is_basic', 'is_premium',)
+    readonly_fields = (
+        "get_username",
+        "is_basic",
+        "is_premium",
+    )
 
     @classmethod
     def get_username(cls, obj):
