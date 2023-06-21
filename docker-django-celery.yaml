@@ -1,0 +1,109 @@
+version: "3.9"
+
+volumes:
+  postgres_data:
+  mailhog_data:
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fullstack_auth_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.envs/postgres.env
+    expose:
+      - "5432"
+    ports:
+      - "5433:5432"
+
+  celery-beat:
+    build:
+      context: ./core
+      dockerfile: ./docker/Dockerfile
+    command: /celery/beat.sh
+    container_name: fullstack_auth_celery_beat
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+      - ./.envs/email.env
+    depends_on:
+      - postgres
+      - redis
+
+  celery-worker:
+    build:
+      context: ./core
+      dockerfile: ./docker/Dockerfile
+    command: /celery/worker.sh
+    container_name: fullstack_auth_celery_worker
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+      - ./.envs/email.env
+    depends_on:
+      - postgres
+      - redis
+
+  redis:
+    image: redis:7
+    container_name: fullstack_auth_redis
+
+  flower:
+    build:
+      context: ./core
+      dockerfile: ./docker/Dockerfile
+    command: /celery/flower.sh
+    container_name: fullstack_auth_flower
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+      - ./.envs/email.env
+    ports:
+      - "5555:5555"
+    depends_on:
+      - postgres
+      - redis
+
+  smtp:
+    image: mailhog/mailhog
+    container_name: fullstack_auth_smtp
+    env_file:
+      - ./.envs/email.env
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    expose:
+      - 1025
+      - 8025
+    volumes:
+      - mailhog_data:/data
+
+  django-celery:
+    image: fullstack-auth-posts-django:latest
+    container_name: fullstack_auth_django_celery
+    command: >
+      bash -c "
+      /django.sh
+      "
+    volumes:
+      - ./core:/src:z
+    env_file:
+      - ./.envs/django.env
+      - ./.envs/postgres.env
+      - ./.envs/email.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - celery-beat
+      - celery-worker
+      - flower
+      - smtp
