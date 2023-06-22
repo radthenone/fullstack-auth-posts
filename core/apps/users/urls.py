@@ -1,5 +1,11 @@
-from typing import Any, Callable, List, Optional, Union
+from typing import Any
 
-urlpatterns: List[Union[str, Callable[..., Any], Optional[str]]] = [
-    # list of URL patterns here
+from django.urls import path
+
+from apps.users.views import RegisterView, UserViewDetail, UserViewList
+
+urlpatterns: Any = [
+    path("register/", RegisterView.as_view(), name="register"),
+    path("<int:pk>", UserViewDetail.as_view(), name="user-detail"),
+    path("", UserViewList.as_view(), name="user-list"),
 ]

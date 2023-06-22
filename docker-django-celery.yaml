@@ -18,9 +18,7 @@ services:
       - "5433:5432"
 
   celery-beat:
-    build:
-      context: ./core
-      dockerfile: ./docker/Dockerfile
+    image: fullstack-auth-posts-celery-beat:latest
     command: /celery/beat.sh
     container_name: fullstack_auth_celery_beat
     volumes:
@@ -34,9 +32,7 @@ services:
       - redis
 
   celery-worker:
-    build:
-      context: ./core
-      dockerfile: ./docker/Dockerfile
+    image: fullstack-auth-posts-celery-worker:latest
     command: /celery/worker.sh
     container_name: fullstack_auth_celery_worker
     volumes:
@@ -54,9 +50,7 @@ services:
     container_name: fullstack_auth_redis
 
   flower:
-    build:
-      context: ./core
-      dockerfile: ./docker/Dockerfile
+    image: fullstack-auth-posts-flower:latest
     command: /celery/flower.sh
     container_name: fullstack_auth_flower
     volumes:

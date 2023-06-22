@@ -7,6 +7,7 @@ set -o nounset
 # perform tasks from the queue in reality
 sleep 2
 watchfiles \
-    celery.__main__.main --args '-A config.celery worker -l INFO'
+    --filter python \
+    'celery -A config.celery worker -l INFO --logfile=logs/celery.log'
 
 exec "$@"

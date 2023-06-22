@@ -1,14 +1,40 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-from apps.users.models import User, UserBasic, UserPremium
+from apps.users.models import EmailSend, RegisterToken, User, UserBasic, UserPremium
 
 # Register your models here.
 
 
+@admin.register(EmailSend)
+class EmailSendAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "subject",
+        "message",
+        "from_email",
+        "get_recipient_list",
+        "fail_silently",
+    )
+
+    def get_recipient_list(self, obj):
+        return ", ".join(obj.recipient_list)
+
+    get_recipient_list.short_description = "Recipient List"
+
+
+@admin.register(RegisterToken)
+class RegisterTokenAdmin(admin.ModelAdmin):
+    list_display = ("token", "url_used", "created_at", "get_email")
+
+    @classmethod
+    def get_email(cls, obj):
+        return obj.user.email
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "email", "password")
+    list_display = ("id", "username", "email", "password")
 
 
 class CustomForBasicAndPremium(admin.ModelAdmin):

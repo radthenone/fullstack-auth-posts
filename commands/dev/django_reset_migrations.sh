@@ -10,6 +10,7 @@ echo "Give app name if want delete app migrations or delete all"
     echo "You can add app like:"
     echo "./commands/dev/django_reset_migrations.sh <APP_NAME>"
 if [ -z "${1:-}" ]; then
+    echo "Start global process"
     find . -path "*/migrations/*" -name "*.py" -not -path "*__init__*" -delete
     find . -path "*/migrations/*.pyc" -delete
     echo "All Migrations deleted"
@@ -21,6 +22,9 @@ if [ -z "${1:-}" ]; then
     docker volume create fullstack-auth-posts_postgres_data
     docker-compose up postgres --build -d
     docker-compose up django --build -d
+    docker-compose up celery-beat --build -d
+    docker-compose up celery-worker --build -d
+    docker-compose up flower --build -d
     echo "end process"
 else
     app_name="$1"
@@ -37,6 +41,9 @@ else
     docker volume create fullstack-auth-posts_postgres_data
     docker-compose up postgres --build -d
     docker-compose up django --build -d
+    docker-compose up celery-beat --build -d
+    docker-compose up celery-worker --build -d
+    docker-compose up flower --build -d
     echo "end process"
 
 fi

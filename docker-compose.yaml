@@ -2,7 +2,7 @@ version: "3.9"
 
 volumes:
   postgres_data:
-  smtp_data:
+  mailhog_data:
 
 services:
   postgres:
@@ -69,7 +69,7 @@ services:
       - redis
 
   redis:
-    image: redis:7-alpine
+    image: redis:7
     container_name: fullstack_auth_redis
 
   flower:
@@ -108,33 +108,15 @@ services:
       - /app/node_modules
 
   smtp:
-    image: rnwood/smtp4dev
+    image: mailhog/mailhog
     container_name: fullstack_auth_smtp
-    ports:
-      - "5000:80"
-      - "2525:25"
-    volumes:
-      - smtp_data:/app/Smtp4dev/DB
-
-  django-celery:
-    image: fullstack-auth-posts-django:latest
-    container_name: fullstack_auth_django_celery
-    command: >
-      bash -c "
-      /django.sh
-      "
-    volumes:
-      - ./core:/src:z
     env_file:
-      - ./.envs/django.env
-      - ./.envs/postgres.env
       - ./.envs/email.env
     ports:
-      - "8000:8000"
-    depends_on:
-      - postgres
-      - redis
-      - celery-beat
-      - celery-worker
-      - flower
-      - smtp
+      - "1025:1025"
+      - "8025:8025"
+    expose:
+      - 1025
+      - 8025
+    volumes:
+      - mailhog_data:/data

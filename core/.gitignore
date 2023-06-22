@@ -174,3 +174,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 logs
+
+# TODO remove it when project finish
+# Django migrations
+apps/**/migrations/*.py
+!apps/**/migrations/__init__.py

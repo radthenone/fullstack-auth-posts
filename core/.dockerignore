@@ -1,9 +1,7 @@
 # backend
 # =======================================
-**/__pycache__
-**/*.pyc
+/__pycache__
 __pycache__
-*.pyc
 *.pyo
 *.pyd
 .Python
@@ -17,7 +15,6 @@ pip-delete-this-directory.txt
 nosetests.xml
 coverage.xml
 *.cover
-*.log
 .git
 .mypy_cache
 .pytest_cache
