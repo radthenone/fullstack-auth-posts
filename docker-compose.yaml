@@ -17,7 +17,7 @@ services:
     ports:
       - "5433:5432"
 
-  django:
+  django: &django
     build:
       context: ./core
       dockerfile: ./docker/Dockerfile
@@ -37,9 +37,8 @@ services:
       - smtp
 
   celery-beat:
-    build:
-      context: ./core
-      dockerfile: ./docker/Dockerfile
+    <<: *django
+    ports: []
     command: /celery/beat.sh
     container_name: fullstack_auth_celery_beat
     volumes:
@@ -53,9 +52,8 @@ services:
       - redis
 
   celery-worker:
-    build:
-      context: ./core
-      dockerfile: ./docker/Dockerfile
+    <<: *django
+    ports: []
     command: /celery/worker.sh
     container_name: fullstack_auth_celery_worker
     volumes:
@@ -73,9 +71,9 @@ services:
     container_name: fullstack_auth_redis
 
   flower:
-    build:
-      context: ./core
-      dockerfile: ./docker/Dockerfile
+    <<: *django
+    ports:
+      - "5555:5555"
     command: /celery/flower.sh
     container_name: fullstack_auth_flower
     volumes:
@@ -84,8 +82,6 @@ services:
       - ./.envs/django.env
       - ./.envs/postgres.env
       - ./.envs/email.env
-    ports:
-      - "5555:5555"
     depends_on:
       - postgres
       - redis

@@ -43,7 +43,7 @@ def check_expired_register_tokens():
         user = User.objects.filter(email=email)
         email_send = EmailSend.objects.filter(
             recipient_list__contains=[email],
-            from_email=settings.settings.DEFAULT_EMAIL,
+            from_email=settings.DEFAULT_EMAIL,
         )
         user.delete()
         email_send.delete()
