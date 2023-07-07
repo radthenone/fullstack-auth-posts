@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from config.env import BASE_DIR, env
+from celery.schedules import crontab
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -178,6 +179,13 @@ CELERY_TASK_TIME_LIMIT = 5 * 60
 CELERY_TASK_SOFT_TIME_LIMIT = 60
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#beat-scheduler
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#beat-schedule
+CELERY_BEAT_SCHEDULE = {
+    "clean_register_tokens": {
+        "task": "apps.users.tasks.clean_expired_register_tokens",
+        "schedule": crontab(minute="*/30"),
+    }
+}
 
 # django-rest-framework
 # -------------------------------------------------------------------------------

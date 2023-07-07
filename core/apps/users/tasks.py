@@ -33,7 +33,7 @@ def send_confirmation_email(
         print("An error occurred while sending the email:", str(e))
 
 
-@shared_task
+@shared_task(name="check_expired_register_tokens")
 def check_expired_register_tokens():
     expired_tokens = RegisterToken.objects.filter(
         created_at__lte=timezone.now() - timedelta(minutes=30)
