@@ -62,20 +62,19 @@ select = [
     "W",
     "DJ",
 ]
-src = ["core"]
+src = ["core", "frontend"]
 ignore = ["DJ01"]
 unfixable = []
 line-length = 88
 exclude = [
-    "manage.py",
     ".git",
+    "manage.py",
     "*/migrations/*",
-    "*/static/CACHE/*",
+    "*/static/*",
+    "*/config/*",
+    "/core/config/*",
     "docs",
     "node_modules",
-    "venv",
-    ".venv",
-    "*/config/*",
 ]
 
 [tool.ruff.per-file-ignores]
