@@ -74,7 +74,7 @@ exclude = [
     "node_modules",
     "venv",
     ".venv",
-    "*/config/*"
+    "*/config/*",
 ]
 
 [tool.ruff.per-file-ignores]
