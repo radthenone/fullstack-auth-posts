@@ -80,6 +80,7 @@ exclude = [
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401", "E402"]
 "./manage.py" = ["INP001"]
+"*/core/*" = ["E501"]
 
 [tool.ruff.isort]
 known-third-party = [
