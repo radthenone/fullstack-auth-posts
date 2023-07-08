@@ -1,8 +1,7 @@
-from django.conf import settings
-from rest_framework import serializers
-
 from apps.users.models import EmailSend, RegisterToken, User
 from apps.users.tasks import send_confirmation_email
+from django.conf import settings
+from rest_framework import serializers
 
 
 class RegisterSerializer(serializers.ModelSerializer):

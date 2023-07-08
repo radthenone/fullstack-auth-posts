@@ -62,6 +62,7 @@ select = [
     "W",
     "DJ",
 ]
+src = ["core"]
 ignore = ["DJ01"]
 unfixable = []
 line-length = 88
