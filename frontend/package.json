@@ -7,13 +7,14 @@
         "dev": "vite",
         "build": "tsc && vite build",
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "prettier": "prettier",
+        "prettier": "npx prettier --write .",
         "preview": "vite preview"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.9.5",
         "axios": "^1.4.0",
         "js-cookie": "^3.0.5",
+        "prettier-linter-helpers": "^1.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-redux": "^8.0.7",
