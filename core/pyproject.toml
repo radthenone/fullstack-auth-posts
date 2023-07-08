@@ -69,10 +69,9 @@ line-length = 88
 extend-exclude = [
     ".git",
     "manage.py",
-    "*/migrations/*",
-    "*/static/*",
-    "*/config/*",
-    "/core/config/*",
+    "migrations",
+    "static",
+    "config",
     "docs",
     "node_modules",
 ]
