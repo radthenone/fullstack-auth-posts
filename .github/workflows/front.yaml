@@ -1,0 +1,42 @@
+name: frontend-example
+
+env:
+    DOCKER_BUILDKIT: 1
+    COMPOSE_DOCKER_CLI_BUILD: 1
+
+on:
+    pull_request:
+        branches:
+            - main
+            - develop
+            - master
+
+    push:
+        branches:
+            - main
+            - develop
+            - master
+jobs:
+    vite-vitest-and-linters:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pull-requests: write
+        defaults:
+            run:
+                working-directory: ./frontend
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Vitest install
+              run: npm i
+            - name: Vitest build
+              run: npm run build
+            - name: Prettier
+              run: npm run prettier
+            - name: Lint
+              run: npm run lint
+            - name: Lint-fix
+              run: npm run lint:fix
+            - name: Vitest
+              run: npm run test --no-watch

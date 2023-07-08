@@ -14,7 +14,7 @@ RUN chmod +x ./celery/*.sh
 ARG SRC=/src
 
 WORKDIR ${SRC}
-COPY poetry.lock pyproject.toml ./
+COPY pyproject.toml ./
 
 RUN touch requirements.txt
 RUN poetry export --with dev -f requirements.txt --output requirements.txt

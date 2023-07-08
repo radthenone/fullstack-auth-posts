@@ -1,7 +1,6 @@
-from rest_framework import generics, permissions
-
 from apps.users.models import User
 from apps.users.serializers import UserSerializer
+from rest_framework import generics, permissions
 
 
 class UserViewDetail(generics.RetrieveAPIView):

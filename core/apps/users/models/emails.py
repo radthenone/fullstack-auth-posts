@@ -11,6 +11,9 @@ class EmailSend(models.Model):
     recipient_list = ArrayField(models.EmailField())
     fail_silently = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.subject
+
     @staticmethod
     @shared_task
     def send_emails_async(email_send_id):

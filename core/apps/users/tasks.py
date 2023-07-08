@@ -3,11 +3,10 @@ from datetime import timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from apps.users.models import EmailSend, RegisterToken, User
 from celery import shared_task
 from django.conf import settings
 from django.utils import timezone
-
-from apps.users.models import EmailSend, RegisterToken, User
 
 
 @shared_task
