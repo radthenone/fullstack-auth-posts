@@ -1,7 +1,8 @@
+import uuid
+
 import pytest
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
-import uuid
 
 
 class TestUser:
