@@ -37,9 +37,9 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Run DB Migrations
-              run: docker-compose run --rm django python manage.py migrate
+              run: docker-compose -f docker-compose.tests.yaml run --rm django python manage.py migrate
             - name: Run Django Tests
-              run: docker-compose run django pytest -s -v --no-migrations
+              run: docker-compose -f docker-compose.tests.yaml run --rm django pytest -s -v --no-migrations
 
     linters:
         runs-on: ubuntu-latest

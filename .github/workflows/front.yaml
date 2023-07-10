@@ -33,7 +33,7 @@ jobs:
             - name: Vitest build
               run: npm run build
             - name: Prettier
-              run: npm run prettier
+              run: npm run prettier:fix
             - name: Lint
               run: npm run lint
             - name: Lint-fix

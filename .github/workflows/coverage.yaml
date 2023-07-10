@@ -1,4 +1,4 @@
-ame: coverage-example
+name: coverage-example
 
 env:
     DOCKER_BUILDKIT: 1
@@ -35,18 +35,16 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Run DB Migrations
-              run: docker-compose run --rm django python manage.py migrate
-            - name: Run Django Tests
-              run: docker-compose run django coverage run -m pytest
-            - name: Generate coverage.lcov
-              run: docker-compose -f docker-compose.yml run django coverage lcov
+              run: docker-compose -f docker-compose.tests.yaml run --rm django python manage.py migrate
+            - name: Run Django Tests with lcov
+              run: docker-compose -f docker-compose.tests.yaml run --rm django pytest -s -v --no-migrations
             - name: Tear down the Stack
               run: docker-compose down
             - name: Coveralls Parallel
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-                  file: "./backend/coverage.lcov"
-                  base-path: "./backend"
+                  file: "./core/coverage.lcov"
+                  base-path: "./core"
                   flag-name: run-1
                   parallel: true
               uses: coverallsapp/github-action@v2
@@ -58,7 +56,7 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Vitest Coverage
-              run: docker-compose run react npx vitest --coverage --no-watch
+              run: docker-compose -f docker-compose.react.yaml run --rm react npx vitest --coverage --no-watch
             - name: Report Coverage
               if: always()
               uses: davelosert/vitest-coverage-report-action@v1
