@@ -35,11 +35,11 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Run DB Migrations
-              run: docker-compose run --rm django python manage.py migrate
+              run: docker-compose -f docker-compose.tests.yaml run --rm django python manage.py migrate
             - name: Run Django Tests
-              run: docker-compose run django coverage run -m pytest
+              run: docker-compose -f docker-compose.tests.yaml run --rm django pytest -s -v --no-migrations
             - name: Generate coverage.lcov
-              run: docker-compose -f docker-compose.yml run django coverage lcov
+              run: docker-compose -f docker-compose.tests.yaml run --rm django coverage lcov
             - name: Tear down the Stack
               run: docker-compose down
             - name: Coveralls Parallel
@@ -58,7 +58,7 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Vitest Coverage
-              run: docker-compose run react npx vitest --coverage --no-watch
+              run: docker-compose -f docker-compose.react.yaml run --rm react npx vitest --coverage --no-watch
             - name: Report Coverage
               if: always()
               uses: davelosert/vitest-coverage-report-action@v1

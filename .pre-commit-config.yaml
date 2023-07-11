@@ -30,11 +30,9 @@ repos:
           - id: prettier
             files: ^frontend/
             additional_dependencies:
-                - prettier@2.8.6
-                - "@trivago/prettier-plugin-sort-imports"
-                - prettier-linter-helpers
+                - prettier@3.0.0
 
-dev_ci:
+ci:
     autoupdate_schedule: weekly
     skip: []
     submodules: false
