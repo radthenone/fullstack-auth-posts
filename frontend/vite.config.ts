@@ -17,14 +17,14 @@ export default defineConfig({
             { find: 'pages', replacement: '/src/pages' },
             { find: 'services', replacement: '/src/services' },
             { find: 'utils', replacement: '/src/utils' },
-            { find: 'server', replacement: '/src/server' }
-        ]
+            { find: 'server', replacement: '/src/server' },
+        ],
     },
     server: {
         watch: {
-            usePolling: true
+            usePolling: true,
         },
         host: '0.0.0.0',
-        port: 3000
-    }
+        port: 3000,
+    },
 });
