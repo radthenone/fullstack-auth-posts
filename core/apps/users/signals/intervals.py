@@ -1,9 +1,9 @@
 from django.apps import AppConfig
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 from django.utils import timezone
 from django_celery_beat.models import IntervalSchedule, PeriodicTask
-from django.core.exceptions import ObjectDoesNotExist
 
 
 @receiver(post_migrate, sender=AppConfig)
