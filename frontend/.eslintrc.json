@@ -31,9 +31,9 @@
         "es2021": true
     },
     "settings": {
-    "import/resolver": {
+        "import/resolver": {
             "node": {
-                "extensions": [".ts", ".tsx" ,".d.ts"],
+                "extensions": [".ts", ".tsx", ".d.ts"],
                 "moduleDirectory": ["src", "node_modules"]
             }
         }
