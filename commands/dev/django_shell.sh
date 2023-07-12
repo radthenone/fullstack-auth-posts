@@ -6,4 +6,4 @@ set -o pipefail
 # exits if any of your variables is not set
 set -o nounset
 
-docker-compose -f docker-compose.tests.yaml run --rm django pytest -s -v
+docker-compose exec -it django sh -c "python manage.py shell_plus"
