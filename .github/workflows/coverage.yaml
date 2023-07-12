@@ -45,8 +45,8 @@ jobs:
             - name: Coveralls Parallel
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-                  file: "./backend/coverage.lcov"
-                  base-path: "./backend"
+                  file: "./core/coverage.lcov"
+                  base-path: "./core"
                   flag-name: run-1
                   parallel: true
               uses: coverallsapp/github-action@v2
