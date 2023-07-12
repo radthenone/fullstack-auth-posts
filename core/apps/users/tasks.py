@@ -3,11 +3,10 @@ from datetime import timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from apps.users.models import EmailSend, RegisterToken, User
 from celery import shared_task
 from django.conf import settings
 from django.utils import timezone
-
-from apps.users.models import EmailSend, RegisterToken, User
 
 
 @shared_task
@@ -33,7 +32,7 @@ def send_confirmation_email(
         print("An error occurred while sending the email:", str(e))
 
 
-@shared_task
+@shared_task(name="check_expired_register_tokens")
 def check_expired_register_tokens():
     expired_tokens = RegisterToken.objects.filter(
         created_at__lte=timezone.now() - timedelta(minutes=30)

@@ -6,6 +6,7 @@ logs
 **/*.back.*
 
 node_modules
+dist
 bower_components
 
 *.sublime*
@@ -13,5 +14,5 @@ bower_components
 psd
 thumb
 sketch
-
-package-lock.json
+.eslintcache
+coverage

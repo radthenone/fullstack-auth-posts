@@ -1,8 +1,9 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { checker } from 'vite-plugin-checker';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [react(), checker({ typescript: true })],
     resolve: {
         alias: [
             { find: '@', replacement: '/src' },
@@ -17,14 +18,27 @@ export default defineConfig({
             { find: 'pages', replacement: '/src/pages' },
             { find: 'services', replacement: '/src/services' },
             { find: 'utils', replacement: '/src/utils' },
-            { find: 'server', replacement: '/src/server' }
-        ]
+            { find: 'server', replacement: '/src/server' },
+        ],
+    },
+    test: {
+        globals: true,
+        setupFiles: './vitest-setup.tsx',
+        environment: 'jsdom',
+        coverage: {
+            lines: 60,
+            branches: 60,
+            functions: 60,
+            statements: 60,
+            provider: 'c8',
+            reporter: ['text', 'json-summary', 'json', 'lcov'],
+        },
     },
     server: {
         watch: {
-            usePolling: true
+            usePolling: true,
         },
         host: '0.0.0.0',
-        port: 3000
-    }
+        port: 3000,
+    },
 });

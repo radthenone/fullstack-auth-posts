@@ -1,21 +1,41 @@
 {
-    "env": {
-        "browser": true,
-        "es2020": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react-hooks/recommended"
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx", "*.d.ts"],
+            "parser": "@typescript-eslint/parser"
+        }
     ],
-    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
     },
-    "plugins": ["react-refresh"],
+    "plugins": ["@typescript-eslint", "react-refresh", "import"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react-hooks/recommended",
+        "prettier"
+    ],
     "rules": {
-        "react-refresh/only-export-components": "warn",
-        "import/no-unused-modules": 0
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+        "indent": "error"
+    },
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".ts", ".tsx", ".d.ts"],
+                "moduleDirectory": ["src", "node_modules"]
+            }
+        }
     }
 }

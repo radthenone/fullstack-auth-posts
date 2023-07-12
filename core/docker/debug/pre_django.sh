@@ -7,7 +7,7 @@ if [ $PWD == "/src" ]; then
     echo "End pytest"
 
     echo "Run coverage"
-    pytest --cov=apps --cov=config --cov-config=.coveragerc && coverage html
+    pytest --cov-config=.coveragerc && coverage html
     echo "End coverage"
 
     echo "Run mypy"

@@ -1,7 +1,6 @@
+from apps.users.serializers import RegisterSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-
-from apps.users.serializers import RegisterSerializer
 
 
 class RegisterView(generics.CreateAPIView):
