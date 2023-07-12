@@ -115,5 +115,3 @@ testpaths = [
 filterwarnings = [
     "ignore:.*U.*mode is deprecated:DeprecationWarning"
 ]
-
-

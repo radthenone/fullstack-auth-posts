@@ -1,6 +1,7 @@
-from tests.users.factories import UserFactory
 import pytest
 from rest_framework.authtoken.models import Token
+
+from tests.users.factories import UserFactory
 
 
 @pytest.fixture

@@ -1,11 +1,12 @@
+from uuid import uuid4
+
+import factory
+from apps.users.models import Profile, UserBasic, UserPremium
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from apps.users.models import Profile, UserPremium, UserBasic
-import factory
-from faker import Faker
 from factory import fuzzy
+from faker import Faker
 from faker.providers import internet, misc
-from uuid import uuid4
 
 faker = Faker()
 faker.add_provider(internet)
