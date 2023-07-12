@@ -4,4 +4,3 @@ omit = */migrations/*
 [paths]
 source =
     apps/
-    config/

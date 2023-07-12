@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 
-class TestUser:
+class CreateUser:
     def __init__(self, username=None, email=None, password=None):
         self.username = username or str(uuid.uuid4())
         self.email = email or self.username + "@example.com"
@@ -14,7 +14,7 @@ class TestUser:
 
 @pytest.fixture
 def create_user(db, django_user_model):
-    user = TestUser()
+    user = CreateUser()
     return django_user_model.objects.create_user(
         username=user.username,
         email=user.email,

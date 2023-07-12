@@ -21,8 +21,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-redux": "^8.0.7",
-        "react-router-dom": "^6.11.2",
-        "vite-plugin-checker": "^0.6.1"
+        "react-router-dom": "^6.11.2"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.16.5",
@@ -43,7 +42,20 @@
         "jsdom": "^22.1.0",
         "prettier": "3.0.0",
         "typescript": "^5.0.2",
-        "vite": "^4.3.9",
-        "vitest": "^0.33.0"
+        "vite": "^4.3.0",
+        "vite-plugin-checker": "latest",
+        "vitest": "^0.30.1"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
     }
 }
