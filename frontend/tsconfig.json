@@ -35,7 +35,7 @@
             "pages/*": ["pages/*"],
             "services/*": ["services/*"],
             "utils/*": ["utils/*"],
-            "server/*": ["server/*"]
+            "server/*": ["server/*"],
         }
     },
     "include": ["src", "tests", "vite.config.ts"],

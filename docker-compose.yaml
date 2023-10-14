@@ -16,6 +16,9 @@ services:
       - "5432"
     ports:
       - "5433:5432"
+    logging:
+      options:
+        max-size: 50m
 
   django: &django
     build:

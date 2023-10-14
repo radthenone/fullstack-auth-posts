@@ -1,7 +1,23 @@
-from apps.users.serializers.authorizations import RegisterSerializer
-from apps.users.serializers.serializer import UserSerializer
+from apps.users.serializers.users_serializer import (
+    Validator,
+    UserSerializer,
+    BasicUserSerializer,
+    PremiumUserSerializer,
+)
+from apps.users.serializers.roles_serializer import RolesSerializer
+from apps.users.serializers.friends_serializer import (
+    FriendRequestSerializer,
+    FriendResponseSerializer,
+    FriendResponseDetailSerializer,
+)
 
 __all__ = (
-    "RegisterSerializer",
+    "Validator",
     "UserSerializer",
+    "BasicUserSerializer",
+    "PremiumUserSerializer",
+    "RolesSerializer",
+    "FriendRequestSerializer",
+    "FriendResponseSerializer",
+    "FriendResponseDetailSerializer",
 )

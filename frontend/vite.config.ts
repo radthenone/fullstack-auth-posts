@@ -16,7 +16,7 @@ export default defineConfig({
             { find: 'layouts', replacement: '/src/layouts' },
             { find: 'lib', replacement: '/src/lib' },
             { find: 'pages', replacement: '/src/pages' },
-            { find: 'services', replacement: '/src/services' },
+            { find: 'repositories', replacement: '/src/repositories' },
             { find: 'utils', replacement: '/src/utils' },
             { find: 'server', replacement: '/src/server' },
         ],

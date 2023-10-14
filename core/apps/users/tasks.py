@@ -1,49 +1,24 @@
-import smtplib
-from datetime import timedelta
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
-from apps.users.models import EmailSend, RegisterToken, User
 from celery import shared_task
-from django.conf import settings
-from django.utils import timezone
+import logging
+from apps.emails.utils import send_mail
 
 
 @shared_task
-def send_confirmation_email(
-    sender_email: str,
-    receiver_email: str,
-    add_subject: str,
-    message: str,
-) -> None:
-    subject = add_subject
-
-    msg = MIMEMultipart()
-    msg["From"] = sender_email
-    msg["To"] = receiver_email
-    msg["Subject"] = subject
-    msg.attach(MIMEText(message, "plain"))
-
+def send_friend_request(
+    from_email: str,
+    to_email: str,
+):
     try:
-        with smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT) as smtp:
-            smtp.send_message(msg)
-        print("Email sent successfully!")
-    except Exception as e:
-        print("An error occurred while sending the email:", str(e))
-
-
-@shared_task(name="check_expired_register_tokens")
-def check_expired_register_tokens():
-    expired_tokens = RegisterToken.objects.filter(
-        created_at__lte=timezone.now() - timedelta(minutes=30)
-    )
-    for token in expired_tokens:
-        email = token.user.email
-        user = User.objects.filter(email=email)
-        email_send = EmailSend.objects.filter(
-            recipient_list__contains=[email],
-            from_email=settings.DEFAULT_EMAIL,
+        send_mail(
+            subject=f"Friend request from {from_email}",
+            message_data={
+                "message": "I want to invite to be my friend",
+                "email": from_email,
+            },
+            from_email=from_email,
+            to_email=to_email,
+            template_name="emails/",
         )
-        user.delete()
-        email_send.delete()
-    expired_tokens.delete()
+        logging.info("Friend request send")
+    except ValueError as error:
+        logging.error(error)

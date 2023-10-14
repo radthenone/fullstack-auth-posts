@@ -44,3 +44,13 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
+
+REST_FRAMEWORK += {
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}

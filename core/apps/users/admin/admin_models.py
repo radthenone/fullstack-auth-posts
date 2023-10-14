@@ -1,39 +1,32 @@
-from apps.users.models import EmailSend, RegisterToken, User, UserBasic, UserPremium
+from apps.users.models import Roles, User, UserBasic, UserPremium
 from django.contrib import admin
 from django.contrib.auth.models import Group
-
-# Register your models here.
-
-
-@admin.register(EmailSend)
-class EmailSendAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "subject",
-        "message",
-        "from_email",
-        "get_recipient_list",
-        "fail_silently",
-    )
-
-    def get_recipient_list(self, obj):
-        return ", ".join(obj.recipient_list)
-
-    get_recipient_list.short_description = "Recipient List"
-
-
-@admin.register(RegisterToken)
-class RegisterTokenAdmin(admin.ModelAdmin):
-    list_display = ("token", "url_used", "created_at", "get_email")
-
-    @classmethod
-    def get_email(cls, obj):
-        return obj.user.email
+from apps.users.admin.admin_forms import UserForm
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("id", "username", "email", "password")
+    form = UserForm
+    list_display = (
+        "id",
+        "username",
+        "email",
+        "password",
+        "get_roles",
+        "get_friends",
+        "friend_requests",
+    )
+
+    @classmethod
+    def get_roles(cls, instance):
+        return [role.name for role in instance.roles.all()]
+
+    @classmethod
+    def get_friends(cls, instance):
+        friend_list = instance.friends.exclude(id=instance.id)
+        if friend_list:
+            return [friend.email for friend in friend_list]
+        return []
 
 
 class CustomForBasicAndPremium(admin.ModelAdmin):
@@ -44,6 +37,7 @@ class CustomForBasicAndPremium(admin.ModelAdmin):
         "get_email",
         "get_password",
         "avatar",
+        "get_roles",
     )
     readonly_fields = (
         "get_username",
@@ -63,6 +57,10 @@ class CustomForBasicAndPremium(admin.ModelAdmin):
     def get_password(cls, obj):
         return obj.user.password
 
+    @classmethod
+    def get_roles(cls, obj):
+        return [role.name for role in obj.user.roles.all()]
+
 
 @admin.register(UserBasic)
 class UserBasicAdmin(CustomForBasicAndPremium):
@@ -71,6 +69,11 @@ class UserBasicAdmin(CustomForBasicAndPremium):
 
 @admin.register(UserPremium)
 class UserPremiumAdmin(CustomForBasicAndPremium):
+    pass
+
+
+@admin.register(Roles)
+class RolesAdmin(admin.ModelAdmin):
     pass
 
 

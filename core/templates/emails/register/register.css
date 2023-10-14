@@ -1,0 +1,13 @@
+.extra {
+    border: 1px solid #2d2d2d;
+    display: flex;
+    justify-content: center;
+}
+.message {
+    color: #0074d9;
+    background-color: #1a1a1a;
+    padding: 10px;
+}
+.link {
+    color: yellow;
+}

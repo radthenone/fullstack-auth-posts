@@ -178,3 +178,4 @@ logs
 .ruff_cache/
 
 coverage.lcov
+scripts

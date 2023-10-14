@@ -7,10 +7,13 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+from typing import Sequence
 
 from celery.schedules import crontab
 
 from config.env import BASE_DIR, env
+
+from datetime import timedelta
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -38,7 +41,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_celery_beat",
     "rest_framework",
-    "rest_framework.authtoken",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "drf_spectacular",
     "django_filters",
@@ -47,12 +51,14 @@ THIRD_PARTY_APPS = [
 ]
 
 CREATE_APPS = [
+    "apps.emails",
     "apps.users",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CREATE_APPS
 
 MIDDLEWARE = [
+    "log_request_id.middleware.RequestIDMiddleware",
     "silk.middleware.SilkyMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -100,9 +106,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "OPTIONS": {
+            "max_similarity": 0.7,
+            "user_attributes": ("username", "first_name", "last_name", "email"),
+        },
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 8},
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
@@ -184,8 +197,9 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#beat-schedule
 CELERY_BEAT_SCHEDULE = {
     "clean_register_tokens": {
-        "task": "apps.users.tasks.clean_expired_register_tokens",
+        "task": "apps.api.tasks.clean_expired_register_tokens",
         "schedule": crontab(minute="*/30"),
+        "args": ("clean register tokens every 30 minutes",),
     }
 }
 
@@ -195,12 +209,42 @@ CELERY_BEAT_SCHEDULE = {
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+# rest_framework_simplejwt
+# -------------------------------------------------------------------------------
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/
+SIMPLE_JWT = {
+    "TOKEN_OBTAIN_SERIALIZER": "apps.api.serializers.MyTokenObtainPairSerializer",
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": False,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "VERIFYING_KEY": None,
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "JWK_URL": None,
+    "LEEWAY": 0,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+}
+
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -225,6 +269,24 @@ CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:8000",
     "https://127.0.0.1:8000",
 )
+CORS_ALLOW_HEADERS: Sequence[str] = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
+
+CORS_ALLOW_METHODS: Sequence[str] = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
+
 
 # DRF-SPECTACULAR
 # ------------------------------------------------------------------------------
@@ -233,7 +295,7 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "auth api",
     "DESCRIPTION": "Api auth django with react",
     "VERSION": "1.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAuthenticated"],
     "SERVERS": [
         {"url": "http://127.0.0.1:8000", "description": "Local Development server"},
     ],
@@ -254,21 +316,69 @@ CACHES = {
 
 # LOGGING
 # ------------------------------------------------------------------------------
+LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"
+GENERATE_REQUEST_ID_IF_NOT_IN_HEADER = True
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "filters": {
+        "request_id": {"()": "log_request_id.filters.RequestIDFilter"},
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "formatters": {
+        "standard": {
+            "format": "%(asctime)s %(levelname)-8s [%(request_id)s] %(name)s: %(message)s"
+        },
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
     "handlers": {
-        "file": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "filters": [
+                "request_id",
+                "require_debug_true",
+            ],
+            "formatter": "standard",
+        },
+        "debug_file": {
             "level": "DEBUG",
-            "class": "logging.FileHandler",
-            "filename": "./logs/debug.log",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": str(BASE_DIR / "logs/debug.log"),
+            "when": "H",
+            "backupCount": 24,
+        },
+        "logging_file": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": str(BASE_DIR / "logs/logging.log"),
+            "backupCount": 5,
+            "maxBytes": 5242880,
         },
     },
     "loggers": {
         "django": {
-            "handlers": ["file"],
+            "handlers": ["debug_file"],
             "level": "DEBUG",
             "propagate": True,
         },
+        "root": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "django.request-response": {
+            "handlers": ["logging_file"],
+            "level": "INFO",
+        },
     },
 }
+
+DOMAIN_URL = env.str("DOMAIN_URL")
+TOKEN_LIFESPAN = 24  # hrs
+CONN_HEALTH_CHECKS = True

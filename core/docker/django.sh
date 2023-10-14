@@ -11,6 +11,9 @@ sleep 2
 echo "========== DJANGO MIGRATIONS =========="
 python manage.py migrate
 
+echo "========== DJANGO PRELOAD DATA =========="
+python manage.py loaddata roles.yaml
+
 echo "========== DJANGO SUPERUSER =========="
 admin_exists() {
     python <<END

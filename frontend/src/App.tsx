@@ -1,7 +1,13 @@
+import Header from 'components/Header.tsx';
+import Footer from 'components/Footer.tsx';
+
 function App() {
     return (
         <>
-            <h1>Hello World</h1>
+            <Header />
+            <h3>Hello World</h3>
+            <p>extra</p>
+            <Footer />
         </>
     );
 }
