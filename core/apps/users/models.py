@@ -1,4 +1,7 @@
 import uuid
+from functools import wraps
+from typing import Callable
+
 from apps.users.managers import CustomUserManager, CustomRolesManager
 from apps.users.utils import avatar_upload_path
 from django.conf import settings
@@ -6,7 +9,9 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core import exceptions, validators
 from datetime import datetime
-from apps.users.utils import set_username
+from apps.users.utils import set_username, avatar_format
+from PIL import Image
+from django.db.models.fields.files import FieldFile
 
 
 # Create your models here.
@@ -18,10 +23,40 @@ class Validators:
     )
 
     @staticmethod
-    def validate_birth_date(date: datetime):
+    def validate_birth_date(date: datetime) -> None:
         years = datetime.now().year - date.year
         if years < 18:
             raise exceptions.ValidationError("You must be at least 18 years old")
+
+    @classmethod
+    def validate_image_size(
+        cls, width: int, height: int
+    ) -> Callable[[FieldFile], None]:
+        @wraps(wrapped=cls.validate_image_size)
+        def validator(file: FieldFile) -> None:
+            image = Image.open(file.path)
+            if (width is not None and image.width < width) or (
+                height is not None and image.height < height
+            ):
+                raise exceptions.ValidationError(
+                    f"Size should be at least {width} x {height} pixels."
+                )
+
+        return validator
+
+    @classmethod
+    def validate_image_format(
+        cls, allowed_formats: list
+    ) -> Callable[[FieldFile], None]:
+        @wraps(wrapped=cls.validate_image_format)
+        def validator(file: FieldFile) -> None:
+            to_format = avatar_format(file).lower()
+            if to_format not in allowed_formats:
+                raise exceptions.ValidationError(
+                    f'Wrong image format, expected: {", ".join(allowed_formats)}.'
+                )
+
+        return validator
 
 
 class Roles(models.Model):
@@ -85,10 +120,11 @@ class User(AbstractUser):
 
     @property
     def full_name(self) -> str:
-        if self.first_name and self.last_name:
-            return f"{self.first_name} {self.last_name}"
-        else:
-            return ""
+        return (
+            f"{self.first_name} {self.last_name}"
+            if self.first_name and self.last_name
+            else ""
+        )
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -106,7 +142,15 @@ class Profile(models.Model):
         primary_key=True,
         related_name="profile",
     )
-    avatar = models.ImageField(upload_to=avatar_upload_path, null=True, blank=True)
+    avatar = models.ImageField(
+        upload_to=avatar_upload_path,
+        null=True,
+        blank=True,
+        validators=[
+            Validators.validate_image_size(width=200, height=200),
+            Validators.validate_image_format(allowed_formats=["png", "jpeg", "jpg"]),
+        ],
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     birth_date = models.DateField(
@@ -126,12 +170,7 @@ class Profile(models.Model):
 
     @property
     def age(self):
-        if self.birth_date is None:
-            return 0
-        today_year = datetime.now().year
-        birth_year = self.birth_date.year
-        age = today_year - birth_year
-        return age
+        return datetime.now().year - self.birth_date.year if self.birth_date else 0
 
     def save(self, *args, **kwargs):
         self.full_clean()

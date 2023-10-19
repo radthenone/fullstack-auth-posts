@@ -40,6 +40,7 @@ urlpatterns = [
         name="api-docs",
     ),
     # APPS URLS
+    path("api/auth/", include("apps.auth.urls")),
     path("api/users/", include("apps.users.urls")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

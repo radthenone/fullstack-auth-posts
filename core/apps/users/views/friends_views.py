@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework import generics, permissions, mixins, status
-from apps.api.utils import encode_token, decode_token
+from apps.api.tokens import encode_token, decode_token
 from apps.users.serializers import (
     FriendRequestSerializer,
     FriendResponseSerializer,

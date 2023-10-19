@@ -295,7 +295,7 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "auth api",
     "DESCRIPTION": "Api auth django with react",
     "VERSION": "1.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAuthenticated"],
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
     "SERVERS": [
         {"url": "http://127.0.0.1:8000", "description": "Local Development server"},
     ],

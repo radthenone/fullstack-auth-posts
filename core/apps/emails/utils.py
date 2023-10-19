@@ -62,3 +62,24 @@ def send_mail(
         logging.info("Email sent successfully!")
     except Exception as error:
         logging.error(error)
+
+
+class CreateMail(dict):
+    def __init__(
+        self,
+        send_email: str,
+        title: str,
+        info: str,
+        extra_message: dict | None = None,
+        **kwargs,
+    ):
+        if extra_message is None:
+            extra_message = {}
+        super().__init__(**kwargs)
+        self["email"] = send_email
+        self["message"] = {
+            "title": title,
+            "email": send_email,
+            "info": info,
+            **extra_message,
+        }

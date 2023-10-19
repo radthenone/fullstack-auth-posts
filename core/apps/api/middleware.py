@@ -53,14 +53,14 @@ class CustomLoggingMiddleware:
             response = self.get_response(request)
         return response
 
-    def process_view(self, view_func, view_args, view_kwargs):
+    def process_view(self, _, view_func, view_args, view_kwargs):
         self.logger.info(
             f"Processing view: {view_func.__module__}.{view_func.__name__} \
              with {view_args} and {view_kwargs}"
         )
         return None
 
-    def process_response(self, response):
+    def process_response(self, _, response):  # noqa
         self.logger.info(
             f"""
             Processing response: {response.status_code}\n
@@ -87,6 +87,6 @@ class CustomLoggingMiddleware:
         )
         return request
 
-    def process_exception(self, exception):
+    def process_exception(self, _, exception):  # noqa
         self.logger.exception(exception)
         return None
