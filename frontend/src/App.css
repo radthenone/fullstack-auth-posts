@@ -1,20 +1,20 @@
 body {
-    display: flex;
-    flex-flow: row wrap;
-    font-weight: bold;
-    text-align: center;
+  display: flex;
+  flex-flow: row wrap;
+  font-weight: bold;
+  text-align: center;
 }
 
 body > * {
-    flex: 1 100%;
+  flex: 1 100%;
 }
 
 #root {
-    display: flex;
-    flex-flow: row wrap;
-    font-weight: bold;
-    text-align: center;
-    flex: 1 100%;
+  display: flex;
+  flex-flow: row wrap;
+  font-weight: bold;
+  text-align: center;
+  flex: 1 100%;
 }
 
 /*.container {*/

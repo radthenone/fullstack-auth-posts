@@ -26,7 +26,17 @@
     "rules": {
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-        "indent": ["error", 2]
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "no-underscore-dangle": 0,
+        "node/exports-style": ["error", "module.exports"],
+        "prettier/prettier":[
+            "error",
+            {
+                "tabWidth":2,
+                "semi":true,
+                "singleQuote":true
+            }
+        ]
     },
     "env": {
         "browser": true,

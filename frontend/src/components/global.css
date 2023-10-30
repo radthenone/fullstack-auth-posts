@@ -1,10 +1,10 @@
 header {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
 }
 footer {
-    background: #00022e;
-    height: 50px;
-    color: #fc86aa;
+  background: #00022e;
+  height: 50px;
+  color: #fc86aa;
 }
