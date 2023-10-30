@@ -1,11 +1,19 @@
-import Button from '@mui/material/Button';
+import { Grid, Container } from '@mui/material';
+import './global.css';
 
 function Footer() {
     return (
-        <div>
-            <h1>Footer</h1>
-            <Button variant="contained">Hello World</Button>
-        </div>
+        <>
+            <footer>
+                <Grid container justifyContent="center" textAlign="center">
+                    <Grid item xs={12}>
+                        <Container maxWidth="lg">
+                            <p>Copyright © 2023</p>
+                        </Container>
+                    </Grid>
+                </Grid>
+            </footer>
+        </>
     );
 }
 

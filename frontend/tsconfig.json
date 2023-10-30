@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
         "module": "ESNext",
         "skipLibCheck": true,
 
@@ -21,7 +21,7 @@
         "noFallthroughCasesInSwitch": true,
 
         "baseUrl": "./src",
-        "types": ["node", "jest", "@testing-library/jest-dom", "vitest/globals"],
+        "types": ["node", "jest", "@testing-library/jest-dom", "vitest/globals", "vite/client"],
         "paths": {
             "@/*": ["*"],
             "app/*": ["app/*"],

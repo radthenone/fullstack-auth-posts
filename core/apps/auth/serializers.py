@@ -15,7 +15,10 @@ class RegisterMailSerializer(serializers.Serializer):
         validators=[validators.UniqueValidator(queryset=User.objects.all())],
     )
     password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password]
+        write_only=True,
+        style={"input_type": "password"},
+        required=True,
+        validators=[validate_password],
     )
     password2 = serializers.CharField(
         style={"input_type": "password"},
@@ -49,6 +52,12 @@ class RegisterMailSerializer(serializers.Serializer):
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True,
+        style={"input_type": "password"},
+        required=True,
+    )
+
     class Meta:
         model = User
         fields = (
@@ -81,3 +90,19 @@ class RegisterSerializer(serializers.ModelSerializer):
             birth_date=validated_data.get("birth_date"),
         )
         return user
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True, write_only=True, style={"input_type": "email"}
+    )
+    password = serializers.CharField(
+        required=True, write_only=True, style={"input_type": "password"}
+    )
+
+    class Meta:
+        model = User
+        fields = (
+            "email",
+            "password",
+        )

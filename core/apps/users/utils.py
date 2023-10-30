@@ -5,9 +5,15 @@ import base64
 from django.db.models.fields.files import FieldFile
 import os
 from io import BytesIO
+from typing import TYPE_CHECKING, Union
+
+if TYPE_CHECKING:
+    from apps.users.types import UserBasicModelType, UserPremiumModelType
 
 
-def avatar_upload_path(instance: "users.UserBasic | users.UserPremium") -> str:
+def avatar_upload_path(
+    instance: Union["UserBasicModelType", "UserPremiumModelType"]
+) -> str:
     now = datetime.now()
     path = f'avatars/{now.strftime("%Y/%m/%d")}/{instance.user.email}/'
     return path
@@ -17,9 +23,9 @@ def avatar_format(file: FieldFile) -> str:
     return file.path.split(".")[-1]
 
 
-def avatar_thumbnail_size(file: FieldFile, width: int, height: int):
-    size = (width, height)
-    image_name = os.path.basename(file.path)
+def avatar_thumbnail_size(file: FieldFile, width: int, height: int) -> Image.Image:
+    size: tuple[int, int] = (width, height)
+    image_name: str = os.path.basename(file.path)
     with Image.open(file) as image:
         image = ImageOps.contain(image=image, size=size)
         image.thumbnail(size)

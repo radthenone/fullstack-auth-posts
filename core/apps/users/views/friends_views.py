@@ -8,12 +8,26 @@ from apps.users.serializers import (
 )
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    OpenApiTypes,
+)
 
 
 class FriendRequestView(generics.GenericAPIView):
     permissions_classes = [permissions.IsAuthenticated]
     serializer_class = FriendRequestSerializer
+    tag_name = "friends"
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Post a friend",
+        request=FriendRequestSerializer,
+        responses={
+            status.HTTP_201_CREATED: None,
+        },
+    )
     def post(self, request, *args, **kwargs):
         sender_email = request.user.email
         friend_email = request.data.get("friend_email")
@@ -44,6 +58,7 @@ class FriendResponseView(
     generics.GenericAPIView,
 ):
     serializer_class = FriendResponseSerializer
+    tag_name = "friends"
 
     def get_queryset(self):
         users = (
@@ -53,6 +68,14 @@ class FriendResponseView(
         )
         return users
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Get friend list",
+        request=FriendResponseSerializer,
+        responses={
+            status.HTTP_200_OK: FriendResponseSerializer,
+        },
+    )
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
@@ -68,7 +91,16 @@ class FriendResponseDetailView(
     generics.GenericAPIView,
 ):
     serializer_class = FriendResponseDetailSerializer
+    tag_name = "friends"
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Post a friend",
+        request=FriendResponseDetailSerializer,
+        responses={
+            status.HTTP_200_OK: FriendResponseDetailSerializer,
+        },
+    )
     def post(self, request, friend_token):
         choice = request.data.get("choice")
         user = get_object_or_404(get_user_model(), email=request.user.email)

@@ -292,9 +292,10 @@ CORS_ALLOW_METHODS: Sequence[str] = (
 # ------------------------------------------------------------------------------
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html
 SPECTACULAR_SETTINGS = {
-    "TITLE": "auth api",
-    "DESCRIPTION": "Api auth django with react",
+    "TITLE": "Backend API Documentation similar to Medium",
+    "DESCRIPTION": "Backend endpoints documentation",
     "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
     "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
     "SERVERS": [
         {"url": "http://127.0.0.1:8000", "description": "Local Development server"},

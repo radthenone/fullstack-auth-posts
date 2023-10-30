@@ -16,3 +16,5 @@ thumb
 sketch
 .eslintcache
 coverage
+
+.env

@@ -20,6 +20,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 
 class UserListView(generics.GenericAPIView):
     permission_classes = [permissions.IsAdminUser]
+    tag_name = "users"
 
     def get_queryset(self):
         return get_list_or_404(User.objects.get_related_roles())
@@ -30,18 +31,23 @@ class UserListView(generics.GenericAPIView):
         elif isinstance(instance, UserPremium):
             return PremiumUserSerializer
 
-    def get(self, request):  # noqa
-        qs = self.get_queryset()
+    @extend_schema(
+        tags=[tag_name],
+        description="List all users",
+        responses={
+            status.HTTP_200_OK: BasicUserSerializer | PremiumUserSerializer,
+        },
+    )
+    def get(self, request):
+        queryset = self.get_queryset()
         data = []
-        for user in qs:
+        for user in queryset:
             roles_list = list(user.roles.all().values_list("name", flat=True))
-            if "PREMIUM" in roles_list:
-                instance = get_object_or_404(UserPremium, user=user)
-                serializer_class = self.get_serializer_class(instance=instance)
-            else:
-                instance = get_object_or_404(UserBasic, user=user)
-                serializer_class = self.get_serializer_class(instance=instance)
-            serializer = serializer_class(instance, many=False)
+            user_instance = get_object_or_404(
+                UserPremium if "PREMIUM" in roles_list else UserBasic, user=user
+            )
+            serializer_class = self.get_serializer_class(instance=user_instance)
+            serializer = serializer_class(user_instance, many=False)
             data.append(serializer.data)
         return Response(data, status=status.HTTP_200_OK)
 
@@ -53,6 +59,7 @@ class UserDetailView(
     generics.GenericAPIView,
 ):
     permission_classes = [permissions.IsAuthenticated]
+    tag_name = "users"
 
     def get_object(self) -> Model | None:
         user = self.request.user
@@ -68,12 +75,35 @@ class UserDetailView(
         elif isinstance(instance, UserPremium):
             return PremiumUserSerializer
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Get a user",
+        responses={
+            status.HTTP_200_OK: BasicUserSerializer | PremiumUserSerializer,
+        },
+    )
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Put a user",
+        request=BasicUserSerializer,
+        responses={
+            status.HTTP_200_OK: BasicUserSerializer | PremiumUserSerializer,
+        },
+    )
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Patch a user",
+        request=BasicUserSerializer,
+        responses={
+            status.HTTP_200_OK: BasicUserSerializer | PremiumUserSerializer,
+        },
+    )
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
@@ -81,5 +111,12 @@ class UserDetailView(
         instance.delete()
         instance.user.delete()
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Delete a user",
+        responses={
+            status.HTTP_200_OK: None,
+        },
+    )
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

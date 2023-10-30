@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 
 class RolesListView(GenericAPIView):
     permission_classes = [permissions.IsAdminUser]
+    tag_name = "roles"
 
     def get_queryset(self, *args, **kwargs):
         queryset = Roles.objects.all()
@@ -29,6 +30,9 @@ class RolesListView(GenericAPIView):
                 location=OpenApiParameter.QUERY,
             )
         ],
+        tags=[tag_name],
+        description="Get role with specific name or get list of all roles",
+        responses={status.HTTP_200_OK: RolesSerializer},
     )
     def get(self, request):
         name = request.query_params.get("name")
@@ -44,6 +48,7 @@ class RolesDetailView(GenericAPIView):
     permission_classes = [permissions.IsAdminUser]
     lookup_field = "name"
     queryset = Roles.objects.all()
+    tag_name = "roles"
 
     def get_object(self):
         obj = get_object_or_404(
@@ -51,11 +56,21 @@ class RolesDetailView(GenericAPIView):
         )
         return obj
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Get specific role",
+        responses={status.HTTP_200_OK: RolesSerializer},
+    )
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance=instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Delete specific role",
+        responses={status.HTTP_200_OK: None},
+    )
     def delete(self, request, *args, **kwargs):
         name = kwargs.get("name", None)
         instance = self.get_object()
@@ -65,6 +80,11 @@ class RolesDetailView(GenericAPIView):
             status=status.HTTP_200_OK,
         )
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Patch specific role",
+        responses={status.HTTP_200_OK: RolesSerializer},
+    )
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -73,6 +93,11 @@ class RolesDetailView(GenericAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(
+        tags=[tag_name],
+        description="Put specific role",
+        responses={status.HTTP_200_OK: RolesSerializer},
+    )
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)

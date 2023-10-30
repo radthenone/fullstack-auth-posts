@@ -42,6 +42,6 @@ def create_avatar_thumbnail(
 
     instance.avatar = avatar_thumbnail_size(
         instance.avatar,
-        200,
-        200,
+        100,
+        100,
     )
