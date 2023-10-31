@@ -1,0 +1,49 @@
+{
+  "posts":
+  [
+    {
+      "id": 1,
+      "tag": "react"
+    },
+    {
+      "id": 2,
+      "tag": "django"
+    },
+    {
+      "id": 3,
+      "tag": "redux"
+    },
+    {
+      "id": 4,
+      "tag": "git"
+    },
+    {
+      "id": 5,
+      "tag": "vite"
+    },
+    {
+      "id": 6,
+      "tag": "docker"
+    },
+    {
+      "id": 7,
+      "tag": "javascript"
+    },
+    {
+      "id": 8,
+      "tag": "typescript"
+    },
+    {
+      "id": 9,
+      "tag": "rest-framework"
+    },
+    {
+      "id": 10,
+      "tag": "fast-api"
+    },
+    {
+      "id": 11,
+      "tag": "flask"
+    }
+  ]
+}

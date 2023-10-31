@@ -36,6 +36,7 @@
             "services/*": ["services/*"],
             "utils/*": ["utils/*"],
             "server/*": ["server/*"],
+            "types/*": ["types/*"],
         }
     },
     "include": ["src", "tests", "vite.config.ts"],

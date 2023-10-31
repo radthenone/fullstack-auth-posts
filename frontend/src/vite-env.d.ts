@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 type ImportMetaEnv = {
   readonly API_BACKEND_URL: string;
+  readonly TEST_URL: string;
   readonly NODE_ENV: string;
   // more env variables...
 };

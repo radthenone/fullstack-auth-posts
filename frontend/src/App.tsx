@@ -19,12 +19,14 @@ function App() {
             p: 1,
           }}
         >
-          <Box sx={{ flexGrow: 2, m: 1 }} className="main-left">
+          <Box sx={{ flexGrow: 1, m: 1, minWidth: 300 }} />
+          <Box sx={{ flexGrow: 2, m: 1, minWidth: 800 }} className="main-left">
             <MainLeft />
-          </Box>
-          <Box sx={{ flexGrow: 1, m: 1 }} className="main-right">
+          </Box>{' '}
+          <Box sx={{ flexGrow: 1, m: 1, minWidth: 500 }} className="main-right">
             <MainRight />
           </Box>
+          <Box sx={{ flexGrow: 1, m: 1, minWidth: 300 }} />
         </Box>
         <Footer />
       </BrowserRouter>

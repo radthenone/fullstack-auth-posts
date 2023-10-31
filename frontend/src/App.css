@@ -2,6 +2,7 @@ html,
 body {
   display: flex;
   flex-direction: column;
+  background-color: #fcfcfc;
 }
 
 #root {
@@ -11,25 +12,37 @@ body {
   padding: 0;
 }
 
-/*header {*/
-/*  justify-content: space-between;*/
-/*}*/
-
 .main {
-  height: calc(100vh - 140px);
+  min-height: calc(100vh - 140px);
+  flex: 1;
+  align-items: stretch;
 }
 
 .main-left {
-  background-color: red;
-  height: auto;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0 2px 4px -1px,
+    rgba(0, 0, 0, 0.14) 0 4px 5px 0,
+    rgba(0, 0, 0, 0.12) 0 1px 10px 0;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .main-right {
-  background-color: blue;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0 2px 4px -1px,
+    rgba(0, 0, 0, 0.14) 0 4px 5px 0,
+    rgba(0, 0, 0, 0.12) 0 1px 10px 0;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 footer {
+  color: black;
   min-height: 25px;
   height: 50px;
-  background-color: #008800;
+  background-color: white;
 }
