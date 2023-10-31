@@ -1,49 +1,95 @@
 {
-  "posts":
+  "tags":
   [
     {
       "id": 1,
-      "tag": "react"
+      "name": "react"
     },
     {
       "id": 2,
-      "tag": "django"
+      "name": "django"
     },
     {
       "id": 3,
-      "tag": "redux"
+      "name": "redux"
     },
     {
       "id": 4,
-      "tag": "git"
+      "name": "git"
     },
     {
       "id": 5,
-      "tag": "vite"
+      "name": "vite"
     },
     {
       "id": 6,
-      "tag": "docker"
+      "name": "docker"
     },
     {
       "id": 7,
-      "tag": "javascript"
+      "name": "javascript"
     },
     {
       "id": 8,
-      "tag": "typescript"
+      "name": "typescript"
     },
     {
       "id": 9,
-      "tag": "rest-framework"
+      "name": "rest-framework"
     },
     {
       "id": 10,
-      "tag": "fast-api"
+      "name": "fast-api"
     },
     {
       "id": 11,
-      "tag": "flask"
+      "name": "flask"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "React",
+      "content": "React is a JavaScript library for building user interfaces",
+      "author": "Tom Cook",
+      "date": "2021-05-30T17:30:00.000Z",
+      "link": "http://127.0.0.1:3000/api/posts/1",
+      "tags": [
+        {
+          "id": 1,
+          "name": "react"
+        },
+        {
+          "id": 2,
+          "name": "javascript"
+        },
+        {
+          "id": 3,
+          "name": "typescript"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Django",
+      "content": "Django is a free and open-source web framework for Python.",
+      "author": "Tom Cook",
+      "date": "2021-05-30T17:30:00.000Z",
+      "link": "http://127.0.0.1:3000/api/posts/2",
+      "tags": [
+        {
+          "id": 1,
+          "name": "django"
+        },
+        {
+          "id": 2,
+          "name": "python"
+        },
+        {
+          "id": 3,
+          "name": "javascript"
+        }
+      ]
     }
   ]
 }

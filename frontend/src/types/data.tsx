@@ -1,6 +1,16 @@
 type TagsData = {
   id: number;
-  tag: string;
+  name: string;
 };
 
-export type { TagsData };
+type PostsData = {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  date: string;
+  link: string;
+  tags: TagsData[];
+};
+
+export type { TagsData, PostsData };

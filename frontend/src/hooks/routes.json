@@ -1,4 +1,4 @@
 {
   "/api/*": "/$1",
-  "/:posts/tags": "/:posts"
+  "/:posts/list": "/:posts"
 }
