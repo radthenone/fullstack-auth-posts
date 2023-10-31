@@ -1,5 +1,5 @@
 import { Grid, Container } from '@mui/material';
-import './global.css';
+import '../App.css';
 
 function Footer() {
   return (

@@ -1,5 +1,5 @@
-import './global.css';
-import { Link, useNavigate } from 'react-router-dom';
+import '../App.css';
+// import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 import * as React from 'react';
@@ -15,7 +15,11 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import AutoStories from '@mui/icons-material/AutoStories';
+
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const userSettings = ['Profile', 'Account', 'Dashboard'];
@@ -29,13 +33,6 @@ type User = {
   password: string;
 };
 
-const defaultUserValues: User = {
-  name: '',
-  avatar: '',
-  email: '',
-  password: '',
-};
-
 const initialUser: User = {
   name: 'Tom Cook',
   avatar: 'https://mui.com/static/images/avatar/2.jpg',
@@ -44,8 +41,8 @@ const initialUser: User = {
 };
 
 function Header() {
-  const [user, setUser] = useState<User | undefined>(defaultUserValues);
-  const navigate = useNavigate();
+  const [user, setUser] = useState<null | User>();
+  // const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -65,30 +62,75 @@ function Header() {
     setAnchorElUser(null);
   };
 
-  const handleLogin = (credentials: User) => {
-    // Logika logowania, np. wywołanie funkcji zalogowania
+  const handleLogin = (data: User) => {
     console.log('User zalogowany');
-    // Aktualizacja stanu użytkownika
-    setUser(credentials);
-    // Przekierowanie do widoku "Stats"
-    navigate('/');
+    setUser(data);
+    // navigate('/');
   };
 
   const handleLogout = () => {
-    // Logika wylogowania, np. wywołanie funkcji wylogowania
     console.log('User wylogowany');
-    // Aktualizacja stanu użytkownika na pusty obiekt (wylogowanie)
-    setUser(defaultUserValues);
-    // Przekierowanie na stronę główną
-    navigate('/login');
+    setUser(null);
+    // navigate('/');
   };
+
+  const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.black, 0.05),
+    marginRight: theme.spacing(2),
+    color: theme.palette.common.black,
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
+    },
+  }));
+
+  const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }));
+
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('md')]: {
+        width: '20ch',
+      },
+    },
+  }));
 
   return (
     <header>
-      <AppBar position="static">
-        <Container maxWidth="xl">
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: 'white',
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      >
+        <Container>
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            <AutoStories
+              sx={{
+                display: { xs: 'none', md: 'flex', color: 'black' },
+                mr: 1,
+                fontSize: '42px',
+              }}
+            />
             <Typography
               variant="h6"
               noWrap
@@ -103,8 +145,7 @@ function Header() {
                 textDecoration: 'none',
               }}
             ></Typography>
-
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', color: 'black' } }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -140,12 +181,22 @@ function Header() {
                 ))}
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+            <Box>
+              <Toolbar>
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+                </Search>
+              </Toolbar>
+            </Box>
+            <AutoStories sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
             <Typography
               variant="h5"
               noWrap
-              component={user ? 'a' : Link}
-              to={user ? '/login' : '/'}
+              // component={user ? 'a' : Link}
+              // to={user ? '/login' : '/'}
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -159,12 +210,17 @@ function Header() {
             >
               {user ? 'LOGOUT' : 'LOGO'}
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: 'none', md: 'flex', justifyContent: 'flex-start' },
+              }}
+            >
               {pages.map((page) => (
                 <Button
                   key={page}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{ my: 2, color: 'black', display: 'block' }}
                 >
                   {page}
                 </Button>
@@ -173,7 +229,8 @@ function Header() {
 
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={user ? handleLogout : handleOpenUserMenu} sx={{ p: 0 }}>
+                {/*<IconButton onClick={user ? handleLogout : handleOpenUserMenu} sx={{ p: 0 }}>*/}
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src={user ? user.avatar : ''} />
                 </IconButton>
               </Tooltip>
@@ -197,7 +254,7 @@ function Header() {
                   ? logoutSettings.map((setting) => (
                       <MenuItem
                         key={setting}
-                        onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}
+                        onClick={setting === 'Logout' ? () => handleLogout() : handleCloseUserMenu}
                       >
                         <Typography textAlign="center">{setting}</Typography>
                       </MenuItem>

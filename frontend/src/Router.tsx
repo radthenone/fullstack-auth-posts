@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from 'pages/Screen/Home/Home.tsx';
 import Login from 'pages/Login/Login.tsx';
 
-function Router() {
+export function Router() {
   return (
     <>
       <Routes>
@@ -15,5 +15,3 @@ function Router() {
     </>
   );
 }
-
-export default Router;
