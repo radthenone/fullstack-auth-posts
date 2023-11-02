@@ -22,7 +22,7 @@ class FriendRequestView(generics.GenericAPIView):
 
     @extend_schema(
         tags=[tag_name],
-        description="Post a friend",
+        description="Posts a friend",
         request=FriendRequestSerializer,
         responses={
             status.HTTP_201_CREATED: None,
@@ -95,7 +95,7 @@ class FriendResponseDetailView(
 
     @extend_schema(
         tags=[tag_name],
-        description="Post a friend",
+        description="Posts a friend",
         request=FriendResponseDetailSerializer,
         responses={
             status.HTTP_200_OK: FriendResponseDetailSerializer,

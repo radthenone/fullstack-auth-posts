@@ -19,14 +19,53 @@ function App() {
             p: 1,
           }}
         >
-          <Box sx={{ flexGrow: 1, m: 1, minWidth: 300 }} />
-          <Box sx={{ flexGrow: 2, m: 1, minWidth: 800 }} className="main-left">
+          <Box
+            sx={{
+              flexGrow: 1,
+              m: 1,
+              minWidth: 300,
+              '@media (max-width: 1200px)': {
+                display: 'none',
+              },
+            }}
+          />
+          <Box
+            sx={{
+              flexGrow: 2,
+              m: 1,
+              minWidth: 800,
+              '@media (max-width: 1200px)': {
+                flexGrow: 1,
+                minWidth: 0,
+              },
+            }}
+            className="main-left"
+          >
             <MainLeft />
-          </Box>{' '}
-          <Box sx={{ flexGrow: 1, m: 1, minWidth: 500 }} className="main-right">
+          </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              m: 1,
+              minWidth: 500,
+              '@media (max-width: 1200px)': {
+                display: 'none',
+              },
+            }}
+            className="main-right"
+          >
             <MainRight />
           </Box>
-          <Box sx={{ flexGrow: 1, m: 1, minWidth: 300 }} />
+          <Box
+            sx={{
+              flexGrow: 1,
+              m: 1,
+              minWidth: 300,
+              '@media (max-width: 1200px)': {
+                display: 'none',
+              },
+            }}
+          />
         </Box>
         <Footer />
       </BrowserRouter>
