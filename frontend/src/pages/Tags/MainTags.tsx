@@ -5,7 +5,7 @@ import { PostsData, TagsData } from 'types/data.tsx';
 import TabsScroll from 'components/TabsScroll.tsx';
 import TabPanel from 'components/TabPanel.tsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTags } from 'features/tags/services/api.tsx';
+import { fetchTags } from 'app/services/tagsAPI.tsx';
 
 function MainTags() {
   const dispatch = useDispatch();

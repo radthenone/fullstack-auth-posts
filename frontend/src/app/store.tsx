@@ -2,7 +2,13 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
-const rootReducer = combineReducers({});
+import { api } from 'app/services/api.tsx';
+import auth from 'features/auth/authSlice';
+
+const rootReducer = combineReducers({
+  [api.reducerPath]: api.reducer,
+  auth,
+});
 
 const createMiddleware = () => {
   if (process.env.NODE_ENV === 'development') {
@@ -21,3 +27,5 @@ const store = configureStore({
 });
 
 export default store;
+
+export type RootState = ReturnType<typeof store.getState>;
