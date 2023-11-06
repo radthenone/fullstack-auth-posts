@@ -18,7 +18,7 @@ function NavMenu({ anchorElNav, handleCloseNavMenu, pages, handleOpenNavMenu }: 
     <Box
       sx={{
         display: 'flex',
-        '@media (max-width: 1200px)': {
+        '@media (maxWidth: 1200px)': {
           xs: 'flex',
           md: 'none',
           color: 'black',

@@ -1,8 +1,9 @@
-import { TagType } from 'types/tagTypes';
+import { TagType } from 'types/models/tagTypes.tsx';
 
 type PostType = {
   id: number;
   title: string;
+  image: string;
   content: string;
   author: string;
   date: string;

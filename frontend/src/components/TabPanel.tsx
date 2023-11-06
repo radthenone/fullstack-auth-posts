@@ -1,35 +1,34 @@
-import Box from '@mui/material/Box';
-import { PostsData, TagsData } from 'types/data.tsx';
-import Post from 'pages/Posts/Post.tsx';
-import Typography from '@mui/material/Typography';
+import { Box } from '@mui/material';
+import { PostType, TagType } from 'types';
+import PaginationPosts from 'components/PaginationPosts.tsx';
 
 type TabPanelProps = {
-  posts: PostsData[] | [];
-  tags: TagsData[] | [];
+  posts: PostType[] | [];
+  tags: TagType[] | [];
   value: number;
   index: number;
 };
 
 const TabPanel = ({ posts, tags, value, index }: TabPanelProps) => {
+  const postData = posts?.filter((post) =>
+    post.tags.some((postTag) => postTag.name === tags?.[value]?.name),
+  );
+
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {posts
-            ?.filter((post) => post.tags.some((postTag) => postTag.name === tags?.[value].name))
-            .map((post) => (
-              <Typography key={post.id}>
-                <Post post={post} />
-              </Typography>
-            ))}
-        </Box>
-      )}
-    </div>
+    <>
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <PaginationPosts data={postData} start={1} end={3} extra={tags} />
+          </Box>
+        )}
+      </div>
+    </>
   );
 };
 

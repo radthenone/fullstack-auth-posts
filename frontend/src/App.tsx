@@ -24,7 +24,7 @@ function App() {
               flexGrow: 1,
               m: 1,
               minWidth: 300,
-              '@media (max-width: 1200px)': {
+              '@media (maxWidth: 1200px)': {
                 display: 'none',
               },
             }}
@@ -34,7 +34,7 @@ function App() {
               flexGrow: 2,
               m: 1,
               minWidth: 800,
-              '@media (max-width: 1200px)': {
+              '@media (maxWidth: 1200px)': {
                 flexGrow: 1,
                 minWidth: 0,
               },
@@ -48,7 +48,7 @@ function App() {
               flexGrow: 1,
               m: 1,
               minWidth: 500,
-              '@media (max-width: 1200px)': {
+              '@media (maxWidth: 1200px)': {
                 display: 'none',
               },
             }}
@@ -61,7 +61,7 @@ function App() {
               flexGrow: 1,
               m: 1,
               minWidth: 300,
-              '@media (max-width: 1200px)': {
+              '@media (maxWidth: 1200px)': {
                 display: 'none',
               },
             }}

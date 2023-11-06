@@ -1,53 +1,24 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import axiosBaseQuery from 'app/features/axiosBaseQuery';
-import type { Tag } from 'types/tagTypes';
+import { api } from 'app/services';
+import type { TagType } from 'types';
 
-const baseUrl = `${process.env.TEST_URL}/tags`;
+export const tagsAPI = api.injectEndpoints({
+  endpoints: (build) => ({
+    getAllTags: build.query<TagType[], void>({
+      query: () => ({
+        url: 'tags',
+        method: 'GET',
+      }),
+    }),
+    getTag: build.query<TagType, string>({
+      query: (id) => ({
+        url: `tags/${id}`,
+        method: 'GET',
+        params: {
+          id,
+        },
+      }),
+    }),
+  }),
+});
 
-// const tagsAPI = createApi({
-//   reducerPath: 'api',
-//   baseQuery: axiosBaseQuery({ baseUrl: baseUrl }),
-//   tagTypes: ['Tags'],
-//   endpoints: (build) => ({
-//     getTags: build.query<TagsData[], void>({
-//       query: () => ({
-//         url: 'tags',
-//         method: 'GET',
-//       }),
-//     }),
-//     getTagById: build.query<TagsData, string>({
-//       query: (id) => ({
-//         url: `tags/${id}`,
-//         method: 'GET',
-//       }),
-//     }),
-//     createTag: build.mutation<TagsData, TagsData>({
-//       query: (tag) => ({
-//         url: 'tags',
-//         method: 'POST',
-//         body: tag,
-//       }),
-//     }),
-//     updateTag: build.mutation<TagsData, TagsData>({
-//       query: (tag) => ({
-//         url: `tags/${tag.id}`,
-//         method: 'PUT',
-//         body: tag,
-//       }),
-//     }),
-//     deleteTag: build.mutation<TagsData, string>({
-//       query: (id) => ({
-//         url: `tags/${id}`,
-//         method: 'DELETE',
-//       }),
-//     }),
-//   }),
-// });
-//
-// export const {
-//   useGetTagsQuery,
-//   useGetTagByIdQuery,
-//   useCreateTagMutation,
-//   useUpdateTagMutation,
-//   useDeleteTagMutation,
-// } = tagsAPI;
+export const { useGetAllTagsQuery, useGetTagQuery } = tagsAPI;

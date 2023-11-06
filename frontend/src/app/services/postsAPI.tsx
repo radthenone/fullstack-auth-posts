@@ -1,5 +1,5 @@
-import { api } from 'app/services/api.tsx';
-import type { PostType, PostsResponse } from 'types/postTypes.tsx';
+import { api } from 'app/services';
+import type { PostType, PostsResponse } from 'types';
 
 export const postsApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -8,7 +8,7 @@ export const postsApi = api.injectEndpoints({
       providesTags: ['Posts'],
     }),
     getPost: build.query<PostType, number>({
-      query: (id) => `posts/${id}`,
+      query: (id) => ({ url: `posts/${id}` }),
       providesTags: (post) => [{ type: 'Posts', id: post?.id }],
     }),
     addPost: build.mutation<PostType, Partial<PostType>>({

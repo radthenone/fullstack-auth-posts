@@ -1,20 +1,18 @@
-import { useState, useEffect } from 'react';
-import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
-import { TagsData } from 'types/data.tsx';
-import { useGetTagsQuery } from 'app/services/tagsAPI.tsx';
+import { useGetAllTagsQuery } from 'app/services';
 
 const Tags = () => {
-  const { data, isError, isLoading, error }: TagsData[] = useGetTagsQuery();
+  const { data: tags, isError, isLoading, error } = useGetAllTagsQuery();
 
   if (isError) {
-    return <p>{error.message}</p>;
+    return <p>{(error as Error).message}</p>;
   }
 
   if (isLoading) {
     return <p>Loading...</p>;
   }
-
-  const tags = data.results;
+  if (tags === undefined) {
+    return <p>No tags available.</p>;
+  }
 
   return (
     <>

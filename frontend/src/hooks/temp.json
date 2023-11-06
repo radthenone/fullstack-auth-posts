@@ -51,6 +51,7 @@
       "id": 1,
       "title": "React",
       "content": "React is a JavaScript library for building user interfaces",
+      "image": "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png",
       "author": "Tom Cook",
       "date": "2021-05-30T17:30:00.000Z",
       "link": "http://127.0.0.1:3000/api/posts/1",
@@ -73,6 +74,7 @@
       "id": 2,
       "title": "Django",
       "content": "Django is a free and open-source web framework for Python.",
+      "image": "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png",
       "author": "Tom Cook",
       "date": "2021-05-30T17:30:00.000Z",
       "link": "http://127.0.0.1:3000/api/posts/2",
@@ -84,6 +86,44 @@
         {
           "id": 2,
           "name": "python"
+        },
+        {
+          "id": 3,
+          "name": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Redux",
+      "content": "Redux is a predictable state container for JavaScript apps.",
+      "image": "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png",
+      "author": "Tom Cook",
+      "date": "2021-05-30T17:30:00.000Z",
+      "link": "http://127.0.0.1:3000/api/posts/3",
+      "tags": [
+        {
+          "id": 1,
+          "name": "redux"
+        },
+        {
+          "id": 3,
+          "name": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Git",
+      "content": "Git is a free and open-source distributed version control system.",
+      "image": "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png",
+      "author": "Tom Cook",
+      "date": "2021-05-30T17:30:00.000Z",
+      "link": "http://127.0.0.1:3000/api/posts/4",
+      "tags": [
+        {
+          "id": 1,
+          "name": "git"
         },
         {
           "id": 3,

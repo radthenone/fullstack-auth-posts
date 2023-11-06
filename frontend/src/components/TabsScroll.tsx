@@ -1,11 +1,9 @@
 import { SyntheticEvent } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import { TagsData } from 'types/data.tsx';
+import { Tabs, Tab, Box } from '@mui/material';
+import { TagType } from 'types';
 
 type TabsProps = {
-  tags: TagsData[] | undefined;
+  tags: TagType[] | undefined;
   value: number;
   handleChange: (event: SyntheticEvent, newValue: number) => void;
 };
@@ -24,7 +22,7 @@ const TabsScroll = ({ tags, value, handleChange }: TabsProps) => {
         sx={{
           borderBottom: 1,
           borderColor: 'divider',
-          '@media (max-width: 1200px)': {
+          '@media (maxWidth: 1200px)': {
             display: 'flex',
           },
         }}
@@ -35,7 +33,7 @@ const TabsScroll = ({ tags, value, handleChange }: TabsProps) => {
           aria-label="basic tabs example"
           sx={{
             m: 1,
-            '@media (max-width: 1200px)': {
+            '@media (maxWidth: 1200px)': {
               display: 'flex',
             },
           }}

@@ -2,19 +2,19 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
-import { api } from 'app/services/api.tsx';
-import auth from 'features/auth/authSlice';
+import { api } from 'app/services';
+import { auth } from 'features/auth/services';
 
 const rootReducer = combineReducers({
-  [api.reducerPath]: api.reducer,
-  auth,
+  api: api.reducer,
+  auth: auth.reducer,
 });
 
 const createMiddleware = () => {
   if (process.env.NODE_ENV === 'development') {
-    return [thunk, logger];
+    return [thunk, logger, api.middleware];
   } else {
-    return [];
+    return [api.middleware];
   }
 };
 
@@ -29,3 +29,4 @@ const store = configureStore({
 export default store;
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

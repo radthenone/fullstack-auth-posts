@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery, BaseQueryFn } from '@reduxjs/toolkit/query/react';
 import { RootState } from 'app/store.tsx';
-import { login, logout } from 'features/auth/authSlice';
+import { login, logout } from 'features/auth/services/authSlice.tsx';
 
 const baseUrl = `${process.env.TEST_URL}`;
 
@@ -37,6 +37,6 @@ const baseQueryWithRetry: BaseQueryFn = async (args, api, extraOptions) => {
 export const api = createApi({
   baseQuery: baseQueryWithRetry,
 
-  tagTypes: ['Posts'],
+  tagTypes: ['Posts', 'Tags'],
   endpoints: () => ({}),
 });

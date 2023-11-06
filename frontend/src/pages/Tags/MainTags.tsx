@@ -1,42 +1,39 @@
 import '../../App.css';
-import { SyntheticEvent, useEffect, useState } from 'react';
-import axios from 'axios';
-import { PostsData, TagsData } from 'types/data.tsx';
+import { SyntheticEvent, useState } from 'react';
 import TabsScroll from 'components/TabsScroll.tsx';
 import TabPanel from 'components/TabPanel.tsx';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTags } from 'app/services/tagsAPI.tsx';
+import { useGetAllTagsQuery, useGetAllPostsQuery } from 'app/services';
 
 function MainTags() {
-  const dispatch = useDispatch();
-  const tags = useSelector((state: { tags: TagsData[] }) => state.tags);
-  const [posts, setPosts] = useState<PostsData[] | []>();
+  const {
+    data: tags = [],
+    isLoading: isLoadingTags,
+    isError: isErrorTags,
+    error: errorTags,
+  } = useGetAllTagsQuery();
+  const {
+    data: posts = [],
+    isLoading: isLoadingPosts,
+    isError: isErrorPosts,
+    error: errorPosts,
+  } = useGetAllPostsQuery();
   const [value, setValue] = useState(0);
-
-  const getPostsData = async () => {
-    try {
-      const url = `${process.env.TEST_URL}/posts`;
-      const response = await axios.get(url);
-      setPosts(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    dispatch(fetchTags());
-    getPostsData();
-  }, []);
 
   const handleChange = (_event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  if (isLoadingTags || isLoadingPosts) {
+    return <div>Loading...</div>;
+  }
+  if (isErrorTags || isErrorPosts) {
+    return <div>Error: {((errorTags as Error) || (errorPosts as Error)).message}</div>;
+  }
+
   return (
     <>
       <TabsScroll tags={tags} value={value} handleChange={handleChange} />
-
-      <TabPanel posts={posts ?? []} tags={tags ?? []} value={value} index={value} />
+      <TabPanel posts={posts} tags={tags ?? []} value={value} index={value} />
     </>
   );
 }
