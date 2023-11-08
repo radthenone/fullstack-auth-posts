@@ -1,3 +1,8 @@
+type UserHeaderType = {
+  avatar: string;
+  email: string;
+};
+
 type UserType = {
   first_name: string;
   last_name: string;
@@ -14,4 +19,4 @@ type UserType = {
   isBasic: boolean;
 };
 
-export type { UserType };
+export type { UserType, UserHeaderType };

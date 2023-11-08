@@ -17,28 +17,20 @@ import MenuItem from '@mui/material/MenuItem';
 import AutoStories from '@mui/icons-material/AutoStories';
 import NavMenu from 'components/header/NavMenu.tsx';
 import SearchBar from 'components/header/SearchBar.tsx';
+import type { UserHeaderType } from 'types/users/userTypes';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const userSettings = ['Profile', 'Account', 'Dashboard'];
 const loginSettings = [...userSettings, 'Login'];
 const logoutSettings = [...userSettings, 'Logout'];
 
-type User = {
-  name: string;
-  avatar: string;
-  email: string;
-  password: string;
-};
-
-const initialUser: User = {
-  name: 'Tom Cook',
+const initialUser: UserHeaderType = {
   avatar: 'https://mui.com/static/images/avatar/2.jpg',
   email: 'X2MvD@example.com',
-  password: '123456',
 };
 
 function Header() {
-  const [user, setUser] = useState<null | User>();
+  const [user, setUser] = useState<null | UserHeaderType>();
   // const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -59,7 +51,7 @@ function Header() {
     setAnchorElUser(null);
   };
 
-  const handleLogin = (data: User) => {
+  const handleLogin = (data: UserHeaderType) => {
     console.log('User zalogowany');
     setUser(data);
     // navigate('/');
@@ -151,7 +143,7 @@ function Header() {
               <Tooltip title="Open settings">
                 {/*<IconButton onClick={user ? handleLogout : handleOpenUserMenu} sx={{ p: 0 }}>*/}
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={user ? user.avatar : ''} />
+                  <Avatar alt={user ? user.email : ''} src={user ? user.avatar : ''} />
                 </IconButton>
               </Tooltip>
               <Menu
