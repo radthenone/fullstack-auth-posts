@@ -1,4 +1,6 @@
 import { useGetAllPostsQuery } from 'app/services';
+import PaginationPosts from 'features/posts/components/PaginationPosts.tsx';
+import { Box } from '@mui/material';
 
 const Posts = () => {
   const {
@@ -18,18 +20,9 @@ const Posts = () => {
 
   return (
     <>
-      <div>
-        {posts.map((post) => (
-          <div key={post.id}>
-            <a href={post.link}>
-              <p>{post.title}</p>
-              <p>{post.content}</p>
-              <p>{post.author}</p>
-              <p>{post.date}</p>
-            </a>
-          </div>
-        ))}
-      </div>
+      <Box sx={{ p: 3 }}>
+        <PaginationPosts data={posts} start={1} end={15} count={15} />
+      </Box>
     </>
   );
 };

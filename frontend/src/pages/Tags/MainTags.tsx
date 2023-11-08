@@ -1,7 +1,7 @@
 import '../../App.css';
 import { SyntheticEvent, useState } from 'react';
-import TabsScroll from 'components/TabsScroll.tsx';
-import TabPanel from 'components/TabPanel.tsx';
+import TabsScroll from 'components/main/tab/TabsScroll.tsx';
+import TabPanel from 'components/main/tab/TabPanel.tsx';
 import { useGetAllTagsQuery, useGetAllPostsQuery } from 'app/services';
 
 function MainTags() {

@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
         { find: 'utils', replacement: '/src/utils' },
         { find: 'server', replacement: '/src/server' },
         { find: 'types', replacement: '/src/types' },
+        { find: 'styles', replacement: '/src/styles' },
       ],
     },
     test: {

@@ -1,6 +1,6 @@
 import { SyntheticEvent } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
-import { TagType } from 'types';
+import { TagType } from '@/types';
 
 type TabsProps = {
   tags: TagType[] | undefined;

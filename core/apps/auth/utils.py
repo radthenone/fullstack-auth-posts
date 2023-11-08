@@ -6,6 +6,8 @@ from django.http import HttpRequest
 
 def access_token(email: str) -> str:
     user = User.objects.get_object_by_email(email=email)
+    if not user:
+        raise ValueError("Invalid credentials")
     payload = {
         "token_type": "access",
         "user_id": str(user.id),
@@ -16,6 +18,8 @@ def access_token(email: str) -> str:
 
 def refresh_token(email: str) -> str:
     user = User.objects.get_object_by_email(email=email)
+    if not user:
+        raise ValueError("Invalid credentials")
     payload = {
         "token_type": "refresh",
         "user_id": str(user.id),

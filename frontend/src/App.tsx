@@ -1,74 +1,32 @@
-import Header from 'components/Header.tsx';
-import Footer from 'components/Footer.tsx';
-import MainLeft from 'components/MainLeft.tsx';
-import './App.css';
+import Header from 'components/header/Header.tsx';
+import Footer from 'components/footer/Footer.tsx';
+import MainLeft from 'components/main/MainLeft.tsx';
 import { BrowserRouter } from 'react-router-dom';
-import MainRight from 'components/MainRight.tsx';
+import MainRight from 'components/main/MainRight.tsx';
 import Box from '@mui/material/Box';
+import { useAppStyles } from 'styles/app/appStyles.tsx';
+import { ThemeProvider, useTheme } from '@material-ui/core/styles';
 
 function App() {
+  const theme = useTheme();
+  const classes = useAppStyles(theme);
   return (
     <>
       <BrowserRouter>
         <Header />
-        <Box
-          className="main"
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            p: 1,
-          }}
-        >
-          <Box
-            sx={{
-              flexGrow: 1,
-              m: 1,
-              minWidth: 300,
-              '@media (maxWidth: 1200px)': {
-                display: 'none',
-              },
-            }}
-          />
-          <Box
-            sx={{
-              flexGrow: 2,
-              m: 1,
-              minWidth: 800,
-              '@media (maxWidth: 1200px)': {
-                flexGrow: 1,
-                minWidth: 0,
-              },
-            }}
-            className="main-left"
-          >
+        <Box className={classes.main}>
+          <Box className={classes.mainSide} />
+          <Box className={classes.mainLeft}>
             <MainLeft />
           </Box>
-          <Box
-            sx={{
-              flexGrow: 1,
-              m: 1,
-              minWidth: 500,
-              '@media (maxWidth: 1200px)': {
-                display: 'none',
-              },
-            }}
-            className="main-right"
-          >
+          <Box className={classes.mainRight}>
             <MainRight />
           </Box>
-          <Box
-            sx={{
-              flexGrow: 1,
-              m: 1,
-              minWidth: 300,
-              '@media (maxWidth: 1200px)': {
-                display: 'none',
-              },
-            }}
-          />
+          <Box className={classes.mainSide} />
         </Box>
         <Footer />
       </BrowserRouter>
+      <ThemeProvider theme={theme} children={classes.root} />
     </>
   );
 }

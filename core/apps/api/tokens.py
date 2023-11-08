@@ -1,7 +1,7 @@
 import jwt
 from datetime import datetime, timedelta
-from uuid import uuid4
 from django.conf import settings
+from uuid import uuid4
 
 
 def encode_token(

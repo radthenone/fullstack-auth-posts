@@ -1,4 +1,4 @@
-import '../App.css';
+import '../../App.css';
 // import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -15,8 +15,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AutoStories from '@mui/icons-material/AutoStories';
-import NavMenu from 'components/NavMenu.tsx';
-import SearchBar from 'components/SearchBar.tsx';
+import NavMenu from 'components/header/NavMenu.tsx';
+import SearchBar from 'components/header/SearchBar.tsx';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const userSettings = ['Profile', 'Account', 'Dashboard'];
