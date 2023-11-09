@@ -71,4 +71,4 @@ const useAppStyles = makeStyles({
   },
 });
 
-export { useAppStyles };
+export { theme, useAppStyles };

@@ -5,6 +5,8 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { MouseEvent } from 'react';
+import { useTheme } from '@material-ui/core/styles';
+import { headerStyles } from 'styles/app/headerStyles.tsx';
 
 type NavMenuProps = {
   anchorElNav: null | HTMLElement;
@@ -14,17 +16,10 @@ type NavMenuProps = {
 };
 
 function NavMenu({ anchorElNav, handleCloseNavMenu, pages, handleOpenNavMenu }: NavMenuProps) {
+  const theme = useTheme();
+  const classes = headerStyles(theme);
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        '@media (maxWidth: 1200px)': {
-          xs: 'flex',
-          md: 'none',
-          color: 'black',
-        },
-      }}
-    >
+    <Box className={classes.navMenu}>
       <IconButton
         size="large"
         aria-label="account of current user"
@@ -33,7 +28,7 @@ function NavMenu({ anchorElNav, handleCloseNavMenu, pages, handleOpenNavMenu }: 
         onClick={handleOpenNavMenu}
         color="inherit"
       >
-        {window.innerWidth <= 1200 ? <MenuIcon /> : <Typography>Menu</Typography>}
+        {window.innerWidth <= 1200 ? <MenuIcon /> : <Typography></Typography>}
       </IconButton>
       <Menu
         id="menu-appbar"
