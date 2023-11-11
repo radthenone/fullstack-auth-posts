@@ -12,7 +12,7 @@ import {
   Checkbox,
   Alert,
 } from '@mui/material';
-import { useLoginMutation } from 'app/services/authAPI';
+import { useLoginMutation } from 'app/services/old/authAPI.tsx';
 
 const LoginPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);

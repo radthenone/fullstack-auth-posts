@@ -1,14 +1,16 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import { theme } from 'styles/app/appStyles.tsx';
 
-const headerStyles = makeStyles({
-  navMenu: {
-    display: 'flex',
-    color: 'black',
-    [theme.breakpoints.only('md')]: {
-      display: 'none',
+const headerStyles = makeStyles()(() => {
+  return {
+    navMenu: {
+      display: 'flex',
+      color: 'black',
+      [theme.breakpoints.only('md')]: {
+        display: 'none',
+      },
     },
-  },
+  };
 });
 
 export { headerStyles };

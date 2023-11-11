@@ -38,6 +38,7 @@
             "server/*": ["server/*"],
             "types/*": ["types/*"],
             "styles/*": ["styles/*"],
+            "constants/*": ["constants/*"],
         }
     },
     "include": ["src", "tests", "vite.config.ts"],

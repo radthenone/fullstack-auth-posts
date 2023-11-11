@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config';
 import { loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
+  const env = loadEnv(mode, '../.envs/react.env', '');
   return {
     plugins: [react(), checker({ typescript: true })],
     resolve: {
@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => {
         { find: 'server', replacement: '/src/server' },
         { find: 'types', replacement: '/src/types' },
         { find: 'styles', replacement: '/src/styles' },
+        { find: 'constants', replacement: '/src/constants' },
       ],
     },
     test: {
@@ -43,8 +44,8 @@ export default defineConfig(({ mode }) => {
       watch: {
         usePolling: true,
       },
-      host: '0.0.0.0',
-      port: 3000,
+      host: env.HOST,
+      port: Number(env.PORT),
     },
     define: {
       'process.env': env,

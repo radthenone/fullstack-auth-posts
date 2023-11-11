@@ -5,28 +5,32 @@ import { BrowserRouter } from 'react-router-dom';
 import MainRight from 'components/main/MainRight.tsx';
 import Box from '@mui/material/Box';
 import { useAppStyles } from 'styles/app/appStyles.tsx';
-import { ThemeProvider, useTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@mui/material';
+import { StyledEngineProvider } from '@mui/material/styles';
+import { useTheme } from '@emotion/react';
 
 function App() {
   const theme = useTheme();
-  const classes = useAppStyles(theme);
+  const { classes } = useAppStyles();
   return (
     <>
-      <BrowserRouter>
-        <Header />
-        <Box className={classes.main}>
-          <Box className={classes.mainSide} />
-          <Box className={classes.mainLeft}>
-            <MainLeft />
+      <StyledEngineProvider injectFirst>
+        <BrowserRouter>
+          <Header />
+          <Box className={classes.main}>
+            <Box className={classes.mainSide} />
+            <Box className={classes.mainLeft}>
+              <MainLeft />
+            </Box>
+            <Box className={classes.mainRight}>
+              <MainRight />
+            </Box>
+            <Box className={classes.mainSide} />
           </Box>
-          <Box className={classes.mainRight}>
-            <MainRight />
-          </Box>
-          <Box className={classes.mainSide} />
-        </Box>
-        <Footer />
-      </BrowserRouter>
-      <ThemeProvider theme={theme} children={classes.root} />
+          <Footer />
+        </BrowserRouter>
+        <ThemeProvider theme={theme} children={classes.root} />
+      </StyledEngineProvider>
     </>
   );
 }

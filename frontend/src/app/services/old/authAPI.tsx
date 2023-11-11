@@ -1,4 +1,4 @@
-import { api } from 'app/services';
+import { api } from 'app/services/old/index.tsx';
 import {
   LoginRequestType,
   LoginResponseType,

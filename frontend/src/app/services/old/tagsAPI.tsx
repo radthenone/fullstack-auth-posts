@@ -1,5 +1,5 @@
-import { api } from 'app/services';
-import type { TagType } from 'types';
+import { api } from 'app/services/old/index.tsx';
+import type { TagType } from '@/types';
 
 export const tagsAPI = api.injectEndpoints({
   endpoints: (build) => ({

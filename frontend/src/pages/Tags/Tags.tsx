@@ -1,4 +1,4 @@
-import { useGetAllTagsQuery } from 'app/services';
+import { useGetAllTagsQuery } from 'app/services/old';
 
 const Tags = () => {
   const { data: tags, isError, isLoading, error } = useGetAllTagsQuery();

@@ -1,4 +1,4 @@
-import { useGetAllPostsQuery } from 'app/services';
+import { useGetAllPostsQuery } from 'app/services/old';
 import PaginationPosts from 'features/posts/components/PaginationPosts.tsx';
 import { Box } from '@mui/material';
 

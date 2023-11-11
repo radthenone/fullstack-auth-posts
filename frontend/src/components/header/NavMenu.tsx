@@ -5,7 +5,6 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { MouseEvent } from 'react';
-import { useTheme } from '@material-ui/core/styles';
 import { headerStyles } from 'styles/app/headerStyles.tsx';
 
 type NavMenuProps = {
@@ -16,8 +15,7 @@ type NavMenuProps = {
 };
 
 function NavMenu({ anchorElNav, handleCloseNavMenu, pages, handleOpenNavMenu }: NavMenuProps) {
-  const theme = useTheme();
-  const classes = headerStyles(theme);
+  const { classes } = headerStyles();
   return (
     <Box className={classes.navMenu}>
       <IconButton

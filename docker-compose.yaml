@@ -100,17 +100,15 @@ services:
       context: ./frontend
       dockerfile: ./docker/Dockerfile
     container_name: fullstack_auth_react
-    environment:
-      - NODE_ENV=development
-      - WDS_SOCKET_HOST=127.0.0.1
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
+    env_file:
+      - ./.envs/react.env
     stdin_open: true
     ports:
       - "3000:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    tty: true
 
   smtp:
     image: mailhog/mailhog
