@@ -2,7 +2,8 @@ import '../../App.css';
 import { SyntheticEvent, useState } from 'react';
 import TabsScroll from 'components/main/tab/TabsScroll.tsx';
 import TabPanel from 'components/main/tab/TabPanel.tsx';
-import { useGetAllTagsQuery, useGetAllPostsQuery } from 'app/services/old';
+import { useGetPostsQuery } from 'app/posts/hooks';
+import { useGetTagsQuery } from 'app/tags/hooks';
 
 function MainTags() {
   const {
@@ -10,13 +11,13 @@ function MainTags() {
     isLoading: isLoadingTags,
     isError: isErrorTags,
     error: errorTags,
-  } = useGetAllTagsQuery();
+  } = useGetTagsQuery();
   const {
     data: posts = [],
     isLoading: isLoadingPosts,
     isError: isErrorPosts,
     error: errorPosts,
-  } = useGetAllPostsQuery();
+  } = useGetPostsQuery();
   const [value, setValue] = useState(0);
 
   const handleChange = (_event: SyntheticEvent, newValue: number) => {
@@ -27,13 +28,13 @@ function MainTags() {
     return <div>Loading...</div>;
   }
   if (isErrorTags || isErrorPosts) {
-    return <div>Error: {((errorTags as Error) || (errorPosts as Error)).message}</div>;
+    return <div>Error: {errorTags || errorPosts}</div>;
   }
 
   return (
     <>
       <TabsScroll tags={tags} value={value} handleChange={handleChange} />
-      <TabPanel posts={posts} tags={tags ?? []} value={value} index={value} />
+      <TabPanel posts={posts ?? []} tags={tags ?? []} value={value} index={value} />
     </>
   );
 }

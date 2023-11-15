@@ -5,7 +5,7 @@ import { DevSupport } from '@react-buddy/ide-toolbox';
 import { ComponentPreviews, useInitial } from './dev';
 import App from './App.tsx';
 import { Provider } from 'react-redux';
-import { store } from 'app/store';
+import store from 'app/store';
 
 const element = document.getElementById('root') as HTMLElement;
 const root = ReactDOM.createRoot(element);

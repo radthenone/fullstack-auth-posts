@@ -3,20 +3,21 @@ import { checker } from 'vite-plugin-checker';
 import { defineConfig } from 'vitest/config';
 import { loadEnv } from 'vite';
 
-let env: any;
 let hostValue: string;
 let portValue: number;
+const envDir = '../.envs';
 
 export default defineConfig(({ mode }) => {
-  if (process.env.NODE_ENV === 'development') {
-    env = { ...process.env, ...loadEnv(mode, process.cwd() + '/src', '') };
-    hostValue = env.HOST.toString();
-    portValue = Number(env.PORT);
+  if (process.env.NODE_ENV === 'docker') {
+    mode = 'docker';
+    process.env = loadEnv(mode, `${envDir}/react.env`, '');
+    hostValue = process.env.HOST.toString();
+    portValue = Number(process.env.PORT);
   }
   return {
     plugins: [react(), checker({ typescript: true })],
     build: {
-      outDir: 'build_development',
+      outDir: 'build_production',
     },
     resolve: {
       alias: [
@@ -59,7 +60,7 @@ export default defineConfig(({ mode }) => {
       port: portValue,
     },
     define: {
-      'process.env': env,
+      'process.env': process.env,
     },
     optimizeDeps: {
       include: ['web-vitals'],

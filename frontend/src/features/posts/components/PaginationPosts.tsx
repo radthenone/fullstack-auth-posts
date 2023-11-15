@@ -2,7 +2,7 @@ import { ChangeEvent, useState, useEffect } from 'react';
 import Pagination from '@mui/material/Pagination';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import PostDetail from 'pages/Posts/PostDetail.tsx';
+import PostCard from 'pages/Posts/PostCard.tsx';
 
 type PaginationProps = {
   data: any[];
@@ -32,7 +32,7 @@ const PaginationPosts = ({ data, start, end, count, extra: tags }: PaginationPro
       <Stack spacing={2}>
         <Box mx={{ minHeight: '100vh' }}>
           {slicedData.map((data) => (
-            <PostDetail key={data.id} postId={data.id} />
+            <PostCard key={data.id} postId={data.id} />
           ))}
         </Box>
         <Pagination

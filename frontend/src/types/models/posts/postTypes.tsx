@@ -1,4 +1,4 @@
-import { TagType } from 'types/models/tags/tagTypes.tsx';
+import { TagType } from 'types';
 
 type PostType = {
   id: number;
@@ -11,6 +11,39 @@ type PostType = {
   tags: Array<TagType>;
 };
 
+type postStateType = {
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  data: PostType;
+  error: string;
+};
+
+type postActionType = {
+  type: string;
+  payload: PostType | string;
+};
+
+type postsStateType = {
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  data: ArrayPostType;
+  error: string;
+};
+
+type postsActionType =
+  | { type: string; payload: ArrayPostType[] }
+  | { type: string; payload: ArrayPostType }
+  | { type: string; payload: string };
+
 type ArrayPostType = Array<PostType>;
 
-export type { PostType, ArrayPostType };
+export type {
+  PostType,
+  ArrayPostType,
+  postsStateType,
+  postStateType,
+  postsActionType,
+  postActionType,
+};

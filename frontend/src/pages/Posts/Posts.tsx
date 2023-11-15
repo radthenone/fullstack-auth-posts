@@ -1,4 +1,4 @@
-import { useGetAllPostsQuery } from 'app/services/old';
+import { useGetPostsQuery } from 'app/posts/hooks';
 import PaginationPosts from 'features/posts/components/PaginationPosts.tsx';
 import { Box } from '@mui/material';
 
@@ -8,14 +8,14 @@ const Posts = () => {
     isLoading: isLoadingPosts,
     isError: isErrorPosts,
     error: errorPosts,
-  } = useGetAllPostsQuery();
+  } = useGetPostsQuery();
 
   if (isLoadingPosts || isErrorPosts) {
     return <div>Loading...</div>;
   }
 
-  if (errorPosts) {
-    return <div>Error: {(errorPosts as Error).message}</div>;
+  if (isErrorPosts) {
+    return <div>Error: {errorPosts}</div>;
   }
 
   return (

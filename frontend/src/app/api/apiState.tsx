@@ -1,0 +1,3 @@
+const apiState = {};
+
+export { apiState };

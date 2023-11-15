@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from 'pages/Screen/Home/Home.tsx';
 import Login from 'pages/Login/Login.tsx';
-import RequireAuth from 'features/auth/components/RequireAuth.tsx';
+// import RequireAuth from 'features/auth/components/RequireAuth.tsx';
 import PostDetail from 'pages/Posts/PostDetail.tsx';
 import Posts from 'pages/Posts/Posts.tsx';
 
@@ -18,7 +18,7 @@ export function Router() {
         <Route path="/login" element={<Login />} />
         <Route path="/posts" element={<Posts />} />
         <Route path="/posts/:id" element={<PostDetail />} />
-        <Route element={<RequireAuth />}></Route>
+        {/*<Route element={<RequireAuth />}></Route>*/}
       </Routes>
     </>
   );

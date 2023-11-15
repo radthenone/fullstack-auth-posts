@@ -17,4 +17,6 @@ sketch
 .eslintcache
 coverage
 
-.env
+src/.env.development
+
+build_*

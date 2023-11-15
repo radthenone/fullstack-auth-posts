@@ -3,4 +3,14 @@ type TagType = {
   name: string;
 };
 
-export type { TagType };
+type tagsStateType = {
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  data: ArrayTagType;
+  error: string;
+};
+
+type ArrayTagType = Array<TagType>;
+
+export type { TagType, ArrayTagType, tagsStateType };

@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { PostType, TagType } from '@/types';
+import { PostType, TagType } from 'types';
 import PaginationPosts from 'features/posts/components/PaginationPosts.tsx';
 
 type TabPanelProps = {
