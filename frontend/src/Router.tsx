@@ -4,6 +4,9 @@ import Login from 'pages/Login/Login.tsx';
 // import RequireAuth from 'features/auth/components/RequireAuth.tsx';
 import PostDetail from 'pages/Posts/PostDetail.tsx';
 import Posts from 'pages/Posts/Posts.tsx';
+import Tags from 'pages/Tags/Tags.tsx';
+import TagDetail from 'pages/Tags/TagDetail.tsx';
+import { CreateTagForm } from 'pages/Tags/CreateTagForm.tsx';
 
 export function Router() {
   return (
@@ -16,6 +19,9 @@ export function Router() {
 
         {/*Auth*/}
         <Route path="/login" element={<Login />} />
+        <Route path="/tags" element={<Tags />} />
+        <Route path="/tags/:id" element={<TagDetail />} />
+        <Route path="/tags/create" element={<CreateTagForm />} />
         <Route path="/posts" element={<Posts />} />
         <Route path="/posts/:id" element={<PostDetail />} />
         {/*<Route element={<RequireAuth />}></Route>*/}

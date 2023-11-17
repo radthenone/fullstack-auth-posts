@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import FormatDate from 'components/FormatDate';
+import MaxTextCard from 'components/MaxTextCard';
 import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from 'app/store.tsx';
@@ -32,7 +33,7 @@ const PostCard = ({ postId }: { postId?: number }) => {
               {post?.title}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {post?.content}
+              <MaxTextCard text={post?.content} />
             </Typography>
             <Typography
               variant="body2"

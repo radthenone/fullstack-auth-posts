@@ -3,6 +3,8 @@ import { PaletteTree } from './palette';
 import App from '../App';
 import Header from 'components/header/Header.tsx';
 import Footer from 'components/footer/Footer.tsx';
+import Tags from 'pages/Tags/Tags.tsx'
+import PostCard from 'pages/Posts/PostCard.tsx'
 
 const ComponentPreviews = () => {
   return (
@@ -15,6 +17,12 @@ const ComponentPreviews = () => {
       </ComponentPreview>
       <ComponentPreview path="/Footer">
         <Footer />
+      </ComponentPreview>
+      <ComponentPreview path="/Tags">
+        <Tags />
+      </ComponentPreview>
+      <ComponentPreview path="/PostCard">
+        <PostCard />
       </ComponentPreview>
     </Previews>
   );
