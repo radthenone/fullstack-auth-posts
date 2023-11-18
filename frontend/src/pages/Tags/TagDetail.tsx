@@ -1,4 +1,6 @@
 import { useGetTagQuery } from 'app/tags/hooks';
+import { UpdateTagForm } from 'pages/Tags/UpdateTagForm.tsx';
+import { DeleteTagForm } from 'pages/Tags/DeleteTagForm.tsx';
 
 const PostDetail = () => {
   const { tag } = useGetTagQuery();
@@ -9,6 +11,8 @@ const PostDetail = () => {
   return (
     <>
       <p>{tag.name}</p>
+      <UpdateTagForm />
+      <DeleteTagForm />
     </>
   );
 };

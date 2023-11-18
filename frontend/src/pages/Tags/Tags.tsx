@@ -16,9 +16,10 @@ const Tags = () => {
 
   return (
     <>
+      <p>Tags</p>
       {tags.map((tag) => (
         <div key={tag.id}>
-          <p>{tag.name}</p>
+          <p>{tag?.name}</p>
         </div>
       ))}
     </>

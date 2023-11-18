@@ -7,6 +7,8 @@ import Posts from 'pages/Posts/Posts.tsx';
 import Tags from 'pages/Tags/Tags.tsx';
 import TagDetail from 'pages/Tags/TagDetail.tsx';
 import { CreateTagForm } from 'pages/Tags/CreateTagForm.tsx';
+import { UpdateTagForm } from 'pages/Tags/UpdateTagForm.tsx';
+import { DeleteTagForm } from 'pages/Tags/DeleteTagForm.tsx';
 
 export function Router() {
   return (
@@ -22,6 +24,8 @@ export function Router() {
         <Route path="/tags" element={<Tags />} />
         <Route path="/tags/:id" element={<TagDetail />} />
         <Route path="/tags/create" element={<CreateTagForm />} />
+        <Route path="/tags/:id/update" element={<UpdateTagForm />} />
+        <Route path="/tags/:id/delete" element={<DeleteTagForm />} />
         <Route path="/posts" element={<Posts />} />
         <Route path="/posts/:id" element={<PostDetail />} />
         {/*<Route element={<RequireAuth />}></Route>*/}

@@ -27,6 +27,26 @@ export const tag = createSlice({
         state.isSuccess = false;
         state.isError = true;
         state.error = action.payload as string;
+      })
+      .addCase(tagThunk.modifyTag.fulfilled, (state, action) => {
+        state.isUpdated = true;
+        state.isError = false;
+        state.data = action.payload;
+      })
+      .addCase(tagThunk.modifyTag.rejected, (state, action) => {
+        state.isUpdated = false;
+        state.isError = true;
+        state.error = action.payload as string;
+      })
+      .addCase(tagThunk.removeTag.fulfilled, (state) => {
+        state.isDeleted = true;
+        state.isError = false;
+        state.data = null;
+      })
+      .addCase(tagThunk.removeTag.rejected, (state, action) => {
+        state.isDeleted = false;
+        state.isError = true;
+        state.error = action.payload as string;
       });
   },
 });

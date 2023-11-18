@@ -10,11 +10,7 @@
     },
     {
       "id": 3,
-      "name": "redux"
-    },
-    {
-      "id": 4,
-      "name": "git"
+      "name": "redux2"
     },
     {
       "id": 5,
@@ -23,10 +19,6 @@
     {
       "id": 6,
       "name": "docker"
-    },
-    {
-      "id": 7,
-      "name": "javascript"
     },
     {
       "id": 8,
@@ -45,10 +37,6 @@
       "name": "flask"
     },
     {
-      "name": "aaa",
-      "id": 12
-    },
-    {
       "name": "adda",
       "id": 23
     },
@@ -63,6 +51,42 @@
     {
       "name": "dd",
       "id": 26
+    },
+    {
+      "name": "ww",
+      "id": 27
+    },
+    {
+      "name": "tt",
+      "id": 28
+    },
+    {
+      "name": "dfgdf",
+      "id": 29
+    },
+    {
+      "name": "asdsad",
+      "id": 30
+    },
+    {
+      "name": "bread",
+      "id": 31
+    },
+    {
+      "name": "sad",
+      "id": 32
+    },
+    {
+      "name": "dfg",
+      "id": 33
+    },
+    {
+      "name": "sadasd",
+      "id": 34
+    },
+    {
+      "name": "gfdd",
+      "id": 35
     }
   ],
   "posts": [

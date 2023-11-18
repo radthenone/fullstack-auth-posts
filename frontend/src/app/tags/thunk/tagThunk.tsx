@@ -18,8 +18,8 @@ const tagThunk = {
   modifyTag: createAsyncThunk('tags/modifyTag', async (tag: TagType): Promise<TagType> => {
     return await tagAPI.updateTag(tag);
   }),
-  removeTag: createAsyncThunk('tags/removeTag', async (id: number): Promise<void> => {
-    return await tagAPI.deleteTag(id);
+  removeTag: createAsyncThunk<void, number>('tags/removeTag', async (id: number): Promise<void> => {
+    await tagAPI.deleteTag(id);
   }),
 };
 
