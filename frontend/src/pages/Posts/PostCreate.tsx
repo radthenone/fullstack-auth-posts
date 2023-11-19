@@ -137,7 +137,8 @@ export const PostCreate = () => {
                   name="date"
                   onChange={handleDateChange}
                   required
-                  //@ts-ignore
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
                   defaultValue={defaultValue}
                 />
               </LocalizationProvider>
@@ -171,7 +172,21 @@ export const PostCreate = () => {
                 renderValue={(selected: string[]) => (
                   <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                     {selected.map((value) => (
-                      <Chip key={value} label={value} />
+                      <Chip
+                        key={value}
+                        label={value}
+                        sx={{
+                          m: 0.5,
+                          backgroundColor: '#1976D2',
+                          color: 'white',
+                          borderRadius: '4px',
+                          borderStyle: 'initial',
+                          borderWidth: '0',
+                          boxShadow:
+                            'rgba(0, 0, 0, 0.2) 0 3px 1px -2px, rgba(0, 0, 0, 0.14) 0 2px 2px 0, rgba(0, 0, 0, 0.12) 0 1px 5px 0',
+                          boxSizing: 'content-box',
+                        }}
+                      />
                     ))}
                   </Box>
                 )}
