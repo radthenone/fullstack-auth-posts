@@ -2,7 +2,6 @@ import { RootState } from 'app/store.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { postAPI } from 'app/posts/services/postAPI.tsx';
 import { useEffect } from 'react';
-import { PostType } from 'types';
 import { getPostsLoading, getPostsSuccess, getPostsFailure } from 'app/posts/api/postSlice.tsx';
 import { useParams } from 'react-router-dom';
 export const useGetPostQuery = () => {
@@ -16,7 +15,7 @@ export const useGetPostQuery = () => {
     postAPI
       .getPost(Number(postId))
       .then((response) => {
-        dispatch(getPostsSuccess([response as PostType]));
+        dispatch(getPostsSuccess([response]));
       })
       .catch((error) => {
         dispatch(getPostsFailure(error.message));

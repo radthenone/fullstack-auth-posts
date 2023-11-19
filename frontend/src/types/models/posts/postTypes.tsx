@@ -1,5 +1,7 @@
 import { TagType } from 'types';
 
+type PostTypeWithoutId = Omit<PostType, 'id'>;
+
 type PostType = {
   id: number;
   title: string;
@@ -41,6 +43,7 @@ type ArrayPostType = Array<PostType>;
 
 export type {
   PostType,
+  PostTypeWithoutId,
   ArrayPostType,
   postsStateType,
   postStateType,

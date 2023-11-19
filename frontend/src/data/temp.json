@@ -87,6 +87,10 @@
     {
       "name": "gfdd",
       "id": 35
+    },
+    {
+      "name": "javascript",
+      "id": 36
     }
   ],
   "posts": [
@@ -173,6 +177,6 @@
           "name": "javascript"
         }
       ]
-    }
+    },
   ]
 }

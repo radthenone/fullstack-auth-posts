@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { postsState } from 'app/posts/state';
-import { postsStateType, ArrayPostType } from 'types';
+import { postsStateType, PostType } from 'types';
 
 const initialState: postsStateType = postsState;
 
@@ -17,7 +17,7 @@ export const posts = createSlice({
         data: [],
       };
     },
-    getPostsSuccess: (state, action: PayloadAction<ArrayPostType>) => {
+    getPostsSuccess: (state, action: PayloadAction<PostType[]>) => {
       return {
         ...state,
         isLoading: false,
@@ -35,7 +35,24 @@ export const posts = createSlice({
         error: action.payload,
       };
     },
+    addPostSuccess: (state, action: PayloadAction<PostType>) => {
+      return {
+        ...state,
+        isCreated: true,
+        isError: false,
+        data: [...state.data, action.payload],
+      };
+    },
+    addPostFailure: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        isCreated: false,
+        isError: true,
+        error: action.payload,
+      };
+    },
   },
 });
 
-export const { getPostsLoading, getPostsSuccess, getPostsFailure } = posts.actions;
+export const { getPostsLoading, getPostsSuccess, getPostsFailure, addPostSuccess, addPostFailure } =
+  posts.actions;
