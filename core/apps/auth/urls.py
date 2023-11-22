@@ -1,11 +1,11 @@
 from typing import Any
 
 from apps.auth.views import (
-    RegisterMailView,
-    RegisterView,
+    LoginRefreshView,
     LoginView,
     LogoutView,
-    LoginRefreshView,
+    RegisterMailView,
+    RegisterView,
 )
 from django.urls import path
 
@@ -14,5 +14,5 @@ urlpatterns: Any = [
     path("register/<str:token>/", RegisterView.as_view(), name="register"),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
-    path("login/refresh/", LoginRefreshView.as_view(), name="refresh"),
+    path("login/refresh/", LoginRefreshView.as_view(), name="login-refresh"),
 ]

@@ -1,9 +1,9 @@
 from apps.users.admin.admin_forms import UserForm
 from apps.users.admin.admin_models import (
+    RolesAdmin,
     UserAdmin,
     UserBasicAdmin,
     UserPremiumAdmin,
-    RolesAdmin,
 )
 
 __all__ = (

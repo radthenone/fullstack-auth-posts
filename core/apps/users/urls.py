@@ -1,13 +1,13 @@
 from typing import Any
 
 from apps.users.views import (
+    FriendRequestView,
+    FriendResponseDetailView,
+    FriendResponseView,
+    RolesDetailView,
+    RolesListView,
     UserDetailView,
     UserListView,
-    RolesListView,
-    RolesDetailView,
-    FriendRequestView,
-    FriendResponseView,
-    FriendResponseDetailView,
 )
 from django.urls import path
 

@@ -4,9 +4,8 @@
         "skipLibCheck": true,
         "module": "ESNext",
         "moduleResolution": "Node",
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "suppressImplicitAnyIndexErrors": true,
     },
-    "include": ["vite.config.ts",
-        "vite.docker.config.ts"
-    ]
+    "include": ["vite.config.ts"]
 }

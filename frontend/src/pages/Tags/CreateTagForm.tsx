@@ -4,13 +4,13 @@ import { FormEvent, useState } from 'react';
 
 export const CreateTagForm = () => {
   const [name, setName] = useState<string>('');
-  const { addTag, isError, isCreated, error } = useAddTagMutation();
+  const { setTag, isError, isCreated, error } = useAddTagMutation();
   const tag: { name: string } = { name };
 
   const handleAddTag = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (tag !== null && name !== '' && name !== undefined) {
-      addTag(tag);
+      setTag(tag);
       setName('');
     }
   };

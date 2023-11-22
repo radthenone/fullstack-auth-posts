@@ -1,7 +1,7 @@
+from apps.users.admin.admin_forms import UserForm
 from apps.users.models import Roles, User, UserBasic, UserPremium
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from apps.users.admin.admin_forms import UserForm
 
 
 @admin.register(User)

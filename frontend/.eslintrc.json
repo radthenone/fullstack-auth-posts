@@ -1,7 +1,7 @@
 {
     "overrides": [
         {
-            "files": ["*.ts", "*.tsx", "*.d.ts"],
+            "files": ["*.ts", "*.tsx", "*.d.ts", "*.test.ts", "*.test.tsx"],
             "parser": "@typescript-eslint/parser"
         }
     ],
@@ -27,7 +27,8 @@
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/consistent-type-definitions": ["error", "type"],
         "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-        "no-underscore-dangle": 0
+        "no-underscore-dangle": 0,
+        "@typescript-eslint/no-explicit-any": "off"
     },
     "env": {
         "browser": true,
@@ -36,7 +37,7 @@
     "settings": {
         "import/resolver": {
             "node": {
-                "extensions": [".js", ".jsx",".ts", ".tsx", ".d.ts"],
+                "extensions": [".ts", ".tsx", ".d.ts"],
                 "moduleDirectory": ["src", "node_modules"]
             }
         }

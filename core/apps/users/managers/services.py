@@ -1,14 +1,15 @@
+from typing import TYPE_CHECKING, Optional
+
+from apps.users.managers.repository import RolesQuerySet, UserQuerySet
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.password_validation import validate_password
-from apps.users.managers.repository import RolesQuerySet, UserQuerySet
-from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from apps.users.types import (
+        RolesModelType,
+        RolesQueryType,
         UserModelType,
         UserQueryType,
-        RolesQueryType,
-        RolesModelType,
     )
 
 

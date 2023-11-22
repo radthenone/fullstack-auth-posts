@@ -13,25 +13,23 @@ function App() {
   const theme = useTheme();
   const { classes } = useAppStyles();
   return (
-    <>
-      <StyledEngineProvider injectFirst>
-        <BrowserRouter>
-          <Header />
-          <Box className={classes.main}>
-            <Box className={classes.mainSide} />
-            <Box className={classes.mainLeft}>
-              <MainLeft />
-            </Box>
-            <Box className={classes.mainRight}>
-              <MainRight />
-            </Box>
-            <Box className={classes.mainSide} />
+    <StyledEngineProvider injectFirst>
+      <BrowserRouter>
+        <Header />
+        <Box className={classes.main}>
+          <Box className={classes.mainSide} />
+          <Box className={classes.mainLeft}>
+            <MainLeft />
           </Box>
-          <Footer />
-        </BrowserRouter>
-        <ThemeProvider theme={theme} children={classes.root} />
-      </StyledEngineProvider>
-    </>
+          <Box className={classes.mainRight}>
+            <MainRight />
+          </Box>
+          <Box className={classes.mainSide} />
+        </Box>
+        <Footer />
+      </BrowserRouter>
+      <ThemeProvider theme={theme} />
+    </StyledEngineProvider>
   );
 }
 

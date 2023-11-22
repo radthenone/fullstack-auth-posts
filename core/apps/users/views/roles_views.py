@@ -1,14 +1,14 @@
-from apps.users.serializers import RolesSerializer
-from rest_framework.generics import GenericAPIView
-from rest_framework.views import Response
-from rest_framework import status, permissions
 from apps.users.models import Roles
+from apps.users.serializers import RolesSerializer
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import (
-    extend_schema,
     OpenApiParameter,
     OpenApiTypes,
+    extend_schema,
 )
-from django.shortcuts import get_object_or_404
+from rest_framework import permissions, status
+from rest_framework.generics import GenericAPIView
+from rest_framework.views import Response
 
 
 class RolesListView(GenericAPIView):

@@ -11,10 +11,10 @@ const element = document.getElementById('root') as HTMLElement;
 const root = ReactDOM.createRoot(element);
 root.render(
   <React.StrictMode>
-    <DevSupport ComponentPreviews={ComponentPreviews} useInitialHook={useInitial}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <DevSupport ComponentPreviews={ComponentPreviews} useInitialHook={useInitial}>
         <App />
-      </Provider>
-    </DevSupport>
+      </DevSupport>
+    </Provider>
   </React.StrictMode>,
 );

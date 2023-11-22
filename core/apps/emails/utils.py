@@ -1,9 +1,10 @@
+import logging
+import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from django.template.loader import get_template
-import smtplib
+
 from django.conf import settings
-import logging
+from django.template.loader import get_template
 
 
 def send_mail(

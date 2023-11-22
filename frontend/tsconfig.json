@@ -21,7 +21,7 @@
         "noFallthroughCasesInSwitch": true,
 
         "baseUrl": "./src",
-        "types": ["node", "jest", "@testing-library/jest-dom", "vitest/globals", "vite/client"],
+        "types": ["node","@testing-library/jest-dom"],
         "paths": {
             "@/*": ["*"],
             "app/*": ["app/*"],
@@ -39,13 +39,17 @@
             "types/*": ["types/*"],
             "styles/*": ["styles/*"],
             "constants/*": ["constants/*"],
+            "tests/*": ["tests/*"]
         }
     },
-    "include": ["src", "tests", "vite.config.ts",
+    "include": ["src",
+        "tests",
+        "vite.config.ts",
+        "node_modules/vitest/globals.d.ts",
     ],
     "exclude": ["node_modules", "dist"],
     "optimizeDeps": {
-        "include": ["@testing-library/jest-dom"]
+        "include": ["@testing-library/jest-dom/vitest", "@testing-library/react"]
     },
     "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -108,7 +108,7 @@ function Header() {
               variant="h5"
               noWrap
               // component={user ? 'a' : Link}
-              // to={user ? '/login' : '/'}
+              // to={user ? '/auth' : '/'}
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },

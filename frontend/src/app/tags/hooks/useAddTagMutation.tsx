@@ -1,10 +1,10 @@
 import { tagThunk } from 'app/tags/thunk';
 import { RootState, useAppDispatch, useAppSelector } from 'app/store.tsx';
 import { useEffect, useState } from 'react';
-export const useAddTagMutation = () => {
+const useAddTagMutation = () => {
   const dispatch = useAppDispatch();
   const { isError, isCreated, error } = useAppSelector((state: RootState) => state.tags);
-  const [tag, addTag] = useState<{ name: string }>({ name: '' });
+  const [tag, setTag] = useState<{ name: string }>({ name: '' });
 
   useEffect(() => {
     if (tag.name === '') {
@@ -13,5 +13,7 @@ export const useAddTagMutation = () => {
     dispatch(tagThunk.addTag(tag));
   }, [dispatch, tag]);
 
-  return { addTag, isError, isCreated, error };
+  return { setTag, isError, isCreated, error };
 };
+
+export default useAddTagMutation;

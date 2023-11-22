@@ -19,7 +19,7 @@
 //   const passwordRef = useRef<HTMLInputElement>(null);
 //   const [error, setError] = useState(false);
 //   const navigate = useNavigate();
-//   // const [login, { isLoading }] = useLoginMutation();
+//   // const [auth, { isLoading }] = useLoginMutation();
 //
 //   const loginRequest = {
 //     email: emailRef.current?.value ?? '',
@@ -32,7 +32,7 @@
 //
 //   const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
 //     event.preventDefault();
-//     login(loginRequest);
+//     auth(loginRequest);
 //     navigate('/');
 //   };
 //

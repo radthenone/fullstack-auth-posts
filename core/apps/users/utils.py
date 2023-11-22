@@ -1,11 +1,12 @@
-from datetime import datetime
-from uuid import uuid4
-from PIL import Image, ImageOps
 import base64
-from django.db.models.fields.files import FieldFile
 import os
+from datetime import datetime
 from io import BytesIO
 from typing import TYPE_CHECKING, Union
+from uuid import uuid4
+
+from django.db.models.fields.files import FieldFile
+from PIL import Image, ImageOps
 
 if TYPE_CHECKING:
     from apps.users.types import UserBasicModelType, UserPremiumModelType

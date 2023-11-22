@@ -3,8 +3,9 @@ import { PaletteTree } from './palette';
 import App from '../App';
 import Header from 'components/header/Header.tsx';
 import Footer from 'components/footer/Footer.tsx';
-import Tags from 'pages/Tags/Tags.tsx'
-import PostCard from 'pages/Posts/PostCard.tsx'
+import Tags from 'pages/Tags/Tags.tsx';
+import PostCard from 'pages/Posts/PostCard.tsx';
+import { PostCreate } from 'pages/Posts/PostCreate.tsx';
 
 const ComponentPreviews = () => {
   return (
@@ -23,6 +24,12 @@ const ComponentPreviews = () => {
       </ComponentPreview>
       <ComponentPreview path="/PostCard">
         <PostCard />
+      </ComponentPreview>
+      <ComponentPreview path="/PostCreate">
+        <PostCreate />
+      </ComponentPreview>
+      <ComponentPreview path="/ComponentPreviews">
+        <ComponentPreviews />
       </ComponentPreview>
     </Previews>
   );

@@ -1,11 +1,12 @@
-from django.conf import settings
-from django.db.models.signals import pre_save, post_save
-from django.dispatch import receiver
-from apps.users.models import Profile
 from typing import TYPE_CHECKING
 
+from apps.users.models import Profile
+from django.conf import settings
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+
 if TYPE_CHECKING:
-    from apps.users.types import UserModelType, ProfileModelType
+    from apps.users.types import ProfileModelType, UserModelType
 
 
 @receiver(signal=pre_save, sender=settings.AUTH_USER_MODEL)

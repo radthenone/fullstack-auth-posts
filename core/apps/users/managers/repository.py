@@ -1,5 +1,6 @@
-from django.db import models
 from typing import TYPE_CHECKING, Optional
+
+from django.db import models
 
 if TYPE_CHECKING:
     from apps.users.types import RolesModelType, UserModelType

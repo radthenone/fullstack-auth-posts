@@ -1,20 +1,21 @@
-from rest_framework.response import Response
-from rest_framework import generics, status, parsers
+import json
+
+from apps.api.tokens import decode_token
 from apps.auth.serializers import (
+    LoginSerializer,
     RegisterMailSerializer,
     RegisterSerializer,
-    LoginSerializer,
 )
-from apps.api.tokens import decode_token
-from django.contrib.auth.hashers import check_password
-from apps.emails.tasks import send_register_email
 from apps.auth.utils import (
+    auth_headers_jwt,
     auth_login,
     auth_logout,
     auth_refresh,
-    auth_headers_jwt,
 )
-import json
+from apps.emails.tasks import send_register_email
+from django.contrib.auth.hashers import check_password
+from rest_framework import generics, status
+from rest_framework.response import Response
 
 
 class RegisterMailView(generics.GenericAPIView):
@@ -79,6 +80,7 @@ class LoginView(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# TODO : add serializer
 class LoginRefreshView(generics.GenericAPIView):
     @classmethod
     def get(cls, request):
@@ -89,6 +91,7 @@ class LoginRefreshView(generics.GenericAPIView):
             return Response({"errors": str(error)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# TODO : add serializer
 class LogoutView(generics.GenericAPIView):
     @classmethod
     def get(cls, request):

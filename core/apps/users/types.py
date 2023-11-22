@@ -1,12 +1,13 @@
 from typing import TypeVar
-from django.db.models.query import QuerySet
+
 from apps.users.models import (
+    Profile,
     Roles,
     User,
     UserBasic,
     UserPremium,
-    Profile,
 )
+from django.db.models.query import QuerySet
 
 # Roles Types
 RolesModelType = TypeVar(

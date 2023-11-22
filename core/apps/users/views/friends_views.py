@@ -1,18 +1,16 @@
-from django.shortcuts import get_object_or_404, get_list_or_404
-from rest_framework import generics, permissions, mixins, status
-from apps.api.tokens import encode_token, decode_token
+from apps.api.tokens import decode_token, encode_token
 from apps.users.serializers import (
     FriendRequestSerializer,
-    FriendResponseSerializer,
     FriendResponseDetailSerializer,
+    FriendResponseSerializer,
 )
-from rest_framework.response import Response
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import (
     extend_schema,
-    OpenApiParameter,
-    OpenApiTypes,
 )
+from rest_framework import generics, mixins, permissions, status
+from rest_framework.response import Response
 
 
 class FriendRequestView(generics.GenericAPIView):
@@ -111,34 +109,33 @@ class FriendResponseDetailView(
             return Response(
                 {"errors": payload["errors"]}, status=status.HTTP_400_BAD_REQUEST
             )
-        if payload is not None:
-            if request.user.email == payload.get("friend_email"):
-                sender_email = payload.get("sender_email")
-                sender = get_object_or_404(get_user_model(), email=sender_email)
-                if sender in user.friends.prefetch_related("friends"):
+        if payload is not None and request.user.email == payload.get("friend_email"):
+            sender_email = payload.get("sender_email")
+            sender = get_object_or_404(get_user_model(), email=sender_email)
+            if sender in user.friends.prefetch_related("friends"):
+                return Response(
+                    {
+                        "detail": f"Friend from {sender_email} is already your friend"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            else:
+                if choice == "Yes":
+                    self.handle_accept_request(user, sender, sender_email)
                     return Response(
-                        {
-                            "detail": f"Friend from {sender_email} is already your friend"
+                        data={
+                            "detail": f"Friend from {sender_email} request accepted"
                         },
-                        status=status.HTTP_400_BAD_REQUEST,
+                        status=status.HTTP_200_OK,
                     )
                 else:
-                    if choice == "Yes":
-                        self.handle_accept_request(user, sender, sender_email)
-                        return Response(
-                            data={
-                                "detail": f"Friend from {sender_email} request accepted"
-                            },
-                            status=status.HTTP_200_OK,
-                        )
-                    else:
-                        self.handle_reject_request(user, sender_email)
-                        return Response(
-                            data={
-                                "detail": f"Friend from {sender_email} request rejected"
-                            },
-                            status=status.HTTP_200_OK,
-                        )
+                    self.handle_reject_request(user, sender_email)
+                    return Response(
+                        data={
+                            "detail": f"Friend from {sender_email} request rejected"
+                        },
+                        status=status.HTTP_200_OK,
+                    )
 
         return Response({"errors": "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 

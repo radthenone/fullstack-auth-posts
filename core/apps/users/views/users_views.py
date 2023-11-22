@@ -1,23 +1,18 @@
-from typing import Any
 from apps.users.models import User, UserBasic, UserPremium
 from apps.users.serializers import (
-    UserSerializer,
     BasicUserSerializer,
     PremiumUserSerializer,
 )
-from rest_framework import generics, permissions, mixins, status
+from django.db.models import Model
+from django.shortcuts import get_list_or_404, get_object_or_404
 from drf_spectacular.utils import (
     extend_schema,
-    OpenApiParameter,
-    OpenApiTypes,
 )
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, mixins, permissions, status
 from rest_framework.response import Response
-from django.db.models import QuerySet, Model
-from apps.users.types import UserPremiumQueryType, UserBasicQueryType
-from django.shortcuts import get_object_or_404, get_list_or_404
 
 
+# TODO separate BasicUserSerializer and PremiumUserSerializer
 class UserListView(generics.GenericAPIView):
     permission_classes = [permissions.IsAdminUser]
     tag_name = "users"
@@ -34,8 +29,9 @@ class UserListView(generics.GenericAPIView):
     @extend_schema(
         tags=[tag_name],
         description="List all users",
+        request=BasicUserSerializer,
         responses={
-            status.HTTP_200_OK: BasicUserSerializer | PremiumUserSerializer,
+            status.HTTP_200_OK: [PremiumUserSerializer, BasicUserSerializer],
         },
     )
     def get(self, request):
@@ -78,6 +74,7 @@ class UserDetailView(
     @extend_schema(
         tags=[tag_name],
         description="Get a user",
+        request=[BasicUserSerializer, PremiumUserSerializer],
         responses={
             status.HTTP_200_OK: BasicUserSerializer | PremiumUserSerializer,
         },

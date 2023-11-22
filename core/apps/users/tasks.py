@@ -1,6 +1,7 @@
-from celery import shared_task
 import logging
+
 from apps.emails.utils import send_mail
+from celery import shared_task
 
 
 @shared_task

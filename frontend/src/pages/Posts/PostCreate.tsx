@@ -19,7 +19,7 @@ export const PostCreate = () => {
   const [image, setImage] = useState<File | null>(null);
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
-  const [dateData, setDate] = useState<Date>(todayDate);
+  const [dateData, setDateData] = useState<Date>(todayDate);
   const [link, setLink] = useState('');
   const [tagData, setTagData] = useState<TagType[]>([]);
   const tagsQuery = useGetTagsQuery();
@@ -45,7 +45,7 @@ export const PostCreate = () => {
 
   const handleDateChange = (newDate: Date | null) => {
     const dateAsDayjs = dayjs(newDate);
-    setDate(dateAsDayjs.toDate());
+    setDateData(dateAsDayjs.toDate());
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {

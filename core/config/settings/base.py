@@ -354,13 +354,13 @@ LOGGING = {
             "when": "H",
             "backupCount": 24,
         },
-        "logging_file": {
-            "level": "INFO",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": str(BASE_DIR / "logs/logging.log"),
-            "backupCount": 5,
-            "maxBytes": 5242880,
-        },
+        # "logging_file": {
+        #     "level": "INFO",
+        #     "class": "logging.handlers.RotatingFileHandler",
+        #     "filename": str(BASE_DIR / "logs/logging.log"),
+        #     "backupCount": 5,
+        #     "maxBytes": 5242880,
+        # },
     },
     "loggers": {
         "django": {
@@ -373,10 +373,10 @@ LOGGING = {
             "level": "INFO",
             "propagate": True,
         },
-        "django.request-response": {
-            "handlers": ["logging_file"],
-            "level": "INFO",
-        },
+        # "django.request-response": {
+        #     "handlers": ["logging_file"],
+        #     "level": "INFO",
+        # },
     },
 }
 

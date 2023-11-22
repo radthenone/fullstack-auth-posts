@@ -3,16 +3,18 @@ import { RootState, useAppDispatch, useAppSelector } from 'app/store.tsx';
 import { useEffect, useState } from 'react';
 import { TagType } from 'types';
 
-export const useModifyTagMutation = () => {
+const useModifyTagMutation = () => {
   const dispatch = useAppDispatch();
   const { isError, isUpdated, error } = useAppSelector((state: RootState) => state.tag);
-  const [modTag, setModifyTag] = useState<TagType>();
+  const [modifyTag, setModifyTag] = useState<TagType>();
 
   useEffect(() => {
-    if (modTag) {
-      dispatch(tagThunk.modifyTag(modTag));
+    if (modifyTag) {
+      dispatch(tagThunk.modifyTag(modifyTag));
     }
-  }, [dispatch, modTag]);
+  }, [dispatch, modifyTag]);
 
   return { isError, isUpdated, error, setModifyTag };
 };
+
+export default useModifyTagMutation;

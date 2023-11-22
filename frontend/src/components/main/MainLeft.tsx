@@ -2,11 +2,7 @@ import '../../App.css';
 import { Router } from '../../Router.tsx';
 
 function MainLeft() {
-  return (
-    <>
-      <Router />
-    </>
-  );
+  return <Router />;
 }
 
 export default MainLeft;
