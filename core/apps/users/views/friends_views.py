@@ -12,6 +12,10 @@ from drf_spectacular.utils import (
 from rest_framework import generics, mixins, permissions, status
 from rest_framework.response import Response
 
+from apps.users.types import UserModelType
+from apps.users.models import Friendship
+from django.conf import settings
+
 
 class FriendRequestView(generics.GenericAPIView):
     permissions_classes = [permissions.IsAuthenticated]
@@ -78,9 +82,9 @@ class FriendResponseView(
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         friend_requests_links = [
-            value
+            user.get_friends_response_url(token)
             for user in serializer.data
-            for value in user["friend_requests"].values()
+            for token in user["friend_requests"].values()
         ]
         return Response(friend_requests_links, status=status.HTTP_200_OK)
 
@@ -110,54 +114,42 @@ class FriendResponseDetailView(
                 {"errors": payload["errors"]}, status=status.HTTP_400_BAD_REQUEST
             )
         if payload is not None and request.user.email == payload.get("friend_email"):
-            sender_email = payload.get("sender_email")
-            sender = get_object_or_404(get_user_model(), email=sender_email)
+            sender = get_object_or_404(
+                get_user_model(), email=payload.get("sender_email")
+            )
             if sender in user.friends.prefetch_related("friends"):
                 return Response(
-                    {
-                        "detail": f"Friend from {sender_email} is already your friend"
-                    },
+                    {"detail": f"Friend from {sender.email} is already your friend"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             else:
                 if choice == "Yes":
-                    self.handle_accept_request(user, sender, sender_email)
+                    self.handle_accept_request(user, sender)
                     return Response(
-                        data={
-                            "detail": f"Friend from {sender_email} request accepted"
-                        },
+                        data={"detail": f"Friend from {sender.email} request accepted"},
                         status=status.HTTP_200_OK,
                     )
                 else:
-                    self.handle_reject_request(user, sender_email)
+                    self.handle_reject_request(user, sender)
                     return Response(
-                        data={
-                            "detail": f"Friend from {sender_email} request rejected"
-                        },
+                        data={"detail": f"Friend from {sender.email} request rejected"},
                         status=status.HTTP_200_OK,
                     )
 
         return Response({"errors": "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
-    def handle_expired_token(user, friend_token):
-        tokens_to_remove = []
-        for friend_email, friend_url in user.friend_requests.items():
-            if friend_url.endswith(friend_token):
-                tokens_to_remove.append(friend_email)
-        for email in tokens_to_remove:
-            del user.friend_requests[email]
+    def handle_accept_request(user: "UserModelType", sender: "UserModelType"):
+        friendship = Friendship.objects.add_friend(from_user=sender, to_user=user)
+        friendship.is_accepted = True
+        friendship.save()
+        user.friends.add(friendship, through_defaults={})
+        if sender.email in user.friend_requests.keys():
+            del user.friend_requests[sender.email]
             user.save()
 
     @staticmethod
-    def handle_accept_request(user, sender, sender_email):
-        user.friends.add(sender)
-        if sender_email in user.friend_requests:
-            del user.friend_requests[sender_email]
-            user.save()
-
-    @staticmethod
-    def handle_reject_request(user, sender_email):
-        if sender_email in user.friend_requests:
-            del user.friend_requests[sender_email]
+    def handle_reject_request(user: "UserModelType", sender: "UserModelType"):
+        if sender.email in user.friend_requests.keys():
+            del user.friend_requests[sender.email]
             user.save()

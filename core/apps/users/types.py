@@ -1,11 +1,11 @@
 from typing import TypeVar
 
 from apps.users.models import (
-    Profile,
     Roles,
     User,
     UserBasic,
     UserPremium,
+    Friendship,
 )
 from django.db.models.query import QuerySet
 
@@ -49,12 +49,12 @@ UserPremiumQueryType = TypeVar(
     bound=QuerySet[UserPremium],
 )
 
-# User Profile Types
-ProfileModelType = TypeVar(
-    "ProfileModelType",
-    bound=Profile,
+# Friendship Types
+FriendshipModelType = TypeVar(
+    "FriendshipModelType",
+    bound=Friendship,
 )
-ProfileQueryType = TypeVar(
-    "ProfileQueryType",
-    bound=QuerySet[Profile],
+FriendshipQueryType = TypeVar(
+    "FriendshipQueryType",
+    bound=QuerySet[Roles],
 )

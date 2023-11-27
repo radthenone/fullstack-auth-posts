@@ -1,73 +1,32 @@
+import uuid
 from typing import TYPE_CHECKING, Optional
 
-from apps.users.managers.repository import RolesQuerySet, UserQuerySet
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.password_validation import validate_password
 
 if TYPE_CHECKING:
     from apps.users.types import (
-        RolesModelType,
-        RolesQueryType,
         UserModelType,
-        UserQueryType,
     )
 
 
-class CustomRolesManager(BaseUserManager):
-    def get_queryset(self) -> Optional["RolesQueryType"]:
-        return RolesQuerySet(self.model, using=self._db)
-
-    def get_object_by_name(self, name: str) -> Optional["RolesModelType"]:
-        return self.get_queryset().get_by_name(name=name)
-
-    def get_admin_queryset(self) -> Optional["RolesModelType"]:
-        return self.get_queryset().get_by_name(name="ADMIN")
-
-    def get_basic_queryset(self) -> Optional["RolesModelType"]:
-        return self.get_queryset().get_by_name(name="BASIC")
-
-    def get_premium_queryset(self) -> Optional["RolesModelType"]:
-        return self.get_queryset().get_by_name(name="PREMIUM")
-
-    def get_list_with_names(self, *args, flat=True) -> list:
-        return self.get_queryset().values_list(*args, flat=flat)
-
-    def set_role(
-        self, role: Optional[str], user: "UserModelType", **extra_fields
-    ) -> None:
-        from apps.users.models import UserBasic, UserPremium
-
-        if role == "ADMIN":
-            user.roles.set([self.get_admin_queryset()])
-        elif role == "BASIC" or role is None:
-            user.roles.set([self.get_basic_queryset()])
-            UserBasic.objects.create(user=user, **extra_fields)
-        elif role == "PREMIUM":
-            user.roles.set([self.get_premium_queryset()])
-            UserPremium.objects.create(user=user, **extra_fields)
-
-
 class CustomUserManager(BaseUserManager):
-    def get_queryset(self) -> Optional["UserQueryType"]:
-        return UserQuerySet(self.model, using=self._db)
-
-    def get_related_friends(self) -> Optional["UserQueryType"]:
-        return self.prefetch_related("friends")
-
-    def get_related_roles(self) -> Optional["UserQueryType"]:
-        return self.prefetch_related("roles")
-
-    def get_object_by_email(self, email: str) -> Optional["UserModelType"]:
+    def get_user(self, user_id: int | uuid.UUID) -> Optional["UserModelType"]:
         try:
-            return self.get_queryset().get_by_email(email=email)
-        except UserModelType.DoesNotExist:
+            return self.get_queryset().get(id=user_id)
+        except self.model.DoesNotExist:
             return None
 
-    def get_users_roles_names(self) -> list[list[str]]:
-        return [
-            list(user.roles.all().values_list("name", flat=True))
-            for user in self.get_related_roles()
-        ]
+    def delete_user(self, user_id: int | uuid.UUID) -> None:
+        user = self.get_user(user_id=user_id)
+        user.delete()
+
+    def update_user(
+        self, user_id: int | uuid.UUID, **kwargs
+    ) -> Optional["UserModelType"]:
+        user = self.get_user(user_id=user_id)
+        user.update(**kwargs)
+        return user
 
     def create_user(
         self, email: str, password: str, roles=None, **extra_fields
@@ -92,8 +51,7 @@ class CustomUserManager(BaseUserManager):
         if not user.roles.exists() and not roles:
             UserBasic.objects.create(user=user)
         else:
-            if roles in list(Roles.objects.values_list("name", flat=True)):
-                Roles.objects.set_role(role=roles, user=user)
+            Roles.objects.set_role(role=roles, user=user)
         return user
 
     def create_superuser(

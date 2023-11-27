@@ -1,5 +1,4 @@
 from apps.users.models import User
-from django.conf import settings
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -23,7 +22,6 @@ class FriendRequestSerializer(serializers.Serializer):
         sender_email = self.context.get("sender_email")
         token = self.context.get("email_token")
         friend_email = validated_data.get("friend_email")
-        url = f"{settings.DOMAIN_URL}/api/users/friend/response/{token}"
         friend_model = get_object_or_404(User, email=friend_email)
         friend_emails = [user.email for user in friend_model.friends.all()]
 
@@ -39,7 +37,7 @@ class FriendRequestSerializer(serializers.Serializer):
             )
 
         with transaction.atomic():
-            friend_model.friend_requests[sender_email] = url
+            friend_model.friend_requests[sender_email] = token
             friend_model.save()
 
         return validated_data

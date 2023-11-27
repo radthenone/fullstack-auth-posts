@@ -1,4 +1,4 @@
-from apps.users.models import Profile, User, UserBasic, UserPremium
+from apps.users.models import User, UserBasic, UserPremium, ProfileMixin
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
 
@@ -95,7 +95,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Profile
+        model = ProfileMixin
         fields = (
             "user",
             "avatar",

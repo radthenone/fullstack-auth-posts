@@ -7,9 +7,9 @@ from django.db import models
 
 from apps.users.managers import CustomUserManager
 from apps.users.utils import set_username
-from apps.users.models.abstract import ProfileMixin
-from apps.users.models.friends import Friendship
-from apps.users.models.roles import Roles
+from apps.users.models.abstract_models import ProfileMixin
+from apps.users.models.friends_models import Friendship
+from apps.users.models.roles_models import Roles
 
 
 # Create your models here.
@@ -38,7 +38,6 @@ class User(AbstractUser):
         to="self",
         blank=True,
         through=Friendship,
-        related_name="friends",
         symmetrical=True,
     )
     friend_requests = models.JSONField(default=dict, blank=True)
@@ -78,6 +77,10 @@ class User(AbstractUser):
             else ""
         )
 
+    @staticmethod
+    def get_friends_response_url(token: str) -> str:
+        return f"{settings.DOMAIN_URL}/api/users/friend/response/{token}"
+
     def save(self, *args, **kwargs):
         self.full_clean()
         self.username = set_username(self.email)
@@ -87,7 +90,7 @@ class User(AbstractUser):
         return super().save(*args, **kwargs)
 
 
-class UserPremium(models.Model, ProfileMixin):
+class UserPremium(User, ProfileMixin):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -105,7 +108,7 @@ class UserPremium(models.Model, ProfileMixin):
         return self.user.email
 
 
-class UserBasic(models.Model, ProfileMixin):
+class UserBasic(User, ProfileMixin):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

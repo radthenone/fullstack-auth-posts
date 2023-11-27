@@ -196,10 +196,11 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#beat-schedule
 CELERY_BEAT_SCHEDULE = {
+    # clean expired tokens every day
     "clean_register_tokens": {
-        "task": "apps.api.tasks.clean_expired_register_tokens",
-        "schedule": crontab(minute="*/30"),
-        "args": ("clean register tokens every 30 minutes",),
+        "task": "apps.api.tasks.remove_user_expired_tokens",
+        "schedule": crontab(hour="*/24"),
+        "args": (),
     }
 }
 
