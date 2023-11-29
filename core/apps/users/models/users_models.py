@@ -33,7 +33,7 @@ class User(AbstractUser):
         blank=False,
         validators=[Validators.validate_email_style],
     )
-    roles = models.ManyToManyField(to=Roles, related_name="users", blank=False)
+    roles = models.ManyToManyField(to=Roles, related_name="roles", blank=False)
     friends = models.ManyToManyField(
         to="self",
         blank=True,
@@ -90,7 +90,7 @@ class User(AbstractUser):
         return super().save(*args, **kwargs)
 
 
-class UserPremium(User, ProfileMixin):
+class UserPremium(ProfileMixin):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -108,7 +108,7 @@ class UserPremium(User, ProfileMixin):
         return self.user.email
 
 
-class UserBasic(User, ProfileMixin):
+class UserBasic(ProfileMixin):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

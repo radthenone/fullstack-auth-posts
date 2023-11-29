@@ -7,6 +7,7 @@ from django.conf import settings
 
 def encode_token(
     payload: dict = None,
+    key: str = settings.SIMPLE_JWT["SIGNING_KEY"],
     headers: dict = None,
     exp_weeks: int = 0,
     exp_days: int = 0,
@@ -18,6 +19,7 @@ def encode_token(
     Encodes a token with the given payload and expiration times.
     Parameters:
         payload (dict): A dictionary containing the payload data to be included in the token. Default is an empty dictionary.
+        key (str): The secret key to use for encoding the token. Default is the value of the JWT_SIGNING_KEY setting.
         headers (dict): A dictionary. Default is an empty dictionary.
         exp_weeks (int): The number of weeks until the token expires. Default is 0.
         exp_days (int): The number of days until the token expires. Default is 0.
@@ -61,7 +63,7 @@ def encode_token(
         token = jwt.encode(
             payload=basic_payload,
             headers=headers,
-            key=settings.SIMPLE_JWT["SIGNING_KEY"],
+            key=key,
             algorithm=settings.SIMPLE_JWT["ALGORITHM"],
         )
     except ValueError as error:
@@ -69,24 +71,28 @@ def encode_token(
     return str(token)
 
 
-def decode_token(token: str):
+def decode_token(
+    token: str,
+    key: str = settings.SIMPLE_JWT["SIGNING_KEY"],
+):
     """
     Decodes a token and returns its payload.
     Args:
         token (str): The token to decode.
+        key (str): The key to use for decoding the token.
     Returns:
         dict: The payload of the decoded token.
     Raises:
         jwt.InvalidSignatureError: If the token has an invalid signature.
     """
-    _token = handle_expired_token(token)
+    _token = handle_expired_token(token=token, key=key)
     if isinstance(_token, dict):
         return _token
     else:
         try:
             payload = jwt.decode(
                 jwt=_token,
-                key=settings.SIMPLE_JWT["SIGNING_KEY"],
+                key=key,
                 algorithms=[settings.SIMPLE_JWT["ALGORITHM"]],
             )
         except jwt.InvalidSignatureError:
@@ -94,10 +100,10 @@ def decode_token(token: str):
         return payload
 
 
-def handle_expired_token(token: str):
+def handle_expired_token(token: str, key: str):
     payload = jwt.decode(
         jwt=token,
-        key=settings.SIMPLE_JWT["SIGNING_KEY"],
+        key=key,
         algorithms=[settings.SIMPLE_JWT["ALGORITHM"]],
         options={"verify_signature": False},
     )

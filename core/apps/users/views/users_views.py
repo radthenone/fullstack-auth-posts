@@ -14,11 +14,11 @@ from rest_framework.response import Response
 
 # TODO separate BasicUserSerializer and PremiumUserSerializer
 class UserListView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
     tag_name = "users"
 
     def get_queryset(self):
-        return get_list_or_404(User.objects.get_related_roles())
+        return get_list_or_404(User.objects.prefetch_related("roles"))
 
     def get_serializer_class(self, instance=None):
         if isinstance(instance, UserBasic):

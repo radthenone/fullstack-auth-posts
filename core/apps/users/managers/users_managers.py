@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Optional
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.password_validation import validate_password
+from django.db import transaction
 
 if TYPE_CHECKING:
     from apps.users.types import (
@@ -28,18 +29,20 @@ class CustomUserManager(BaseUserManager):
         user.update(**kwargs)
         return user
 
+    @transaction.atomic
     def create_user(
-        self, email: str, password: str, roles=None, **extra_fields
+        self, email: str, password: str, roles: str = None, **extra_fields
     ) -> "UserModelType":
-        from apps.users.models import Roles, UserBasic
+        from apps.users.models import Roles, UserBasic, UserPremium
 
         """
         Create and save a user with the given email and password.
         """
         if not email:
             raise ValueError("The Email must be set")
-        if password:
-            validate_password(password)
+        if not password:
+            raise ValueError("The Password must be set")
+        validate_password(password)
         email = self.normalize_email(email)
         user = self.model(
             email=email,
@@ -48,12 +51,16 @@ class CustomUserManager(BaseUserManager):
             **extra_fields,
         )
         user.save()
-        if not user.roles.exists() and not roles:
-            UserBasic.objects.create(user=user)
+
+        if roles == "PREMIUM":
+            user.roles.set([Roles.objects.get_premium_queryset()])
+            UserPremium.objects.create(user=user)
         else:
-            Roles.objects.set_role(role=roles, user=user)
+            user.roles.set([Roles.objects.get_basic_queryset()])
+            UserBasic.objects.create(user=user)
         return user
 
+    @transaction.atomic
     def create_superuser(
         self, email: str, password: str, roles=None, **extra_fields
     ) -> "UserModelType":

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="refresh.css">
+</head>
+<body>
+    <div class="flex-container" style="background-color: black; color: white;">
+        <div class="extra">
+            <div class="message">
+            <!------Email Content Start--->
+                <div>
+                    <h1>
+                        Hello <strong>{{ email }}</strong>
+                    </h1>
+                </div>
+                <div>
+                    <p>
+                        {{ message }}
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        Your refresh link
+                    </p>
+                    <a class="link" href="{{ refresh_url }}">Your link to login</a>
+                </div>
+            <!----Email Content End--->
+                <div>
+                <br />
+                App Corp
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

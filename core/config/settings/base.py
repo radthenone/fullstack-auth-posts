@@ -210,8 +210,8 @@ CELERY_BEAT_SCHEDULE = {
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.BasicAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -221,29 +221,9 @@ REST_FRAMEWORK = {
 # -------------------------------------------------------------------------------
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/
 SIMPLE_JWT = {
-    "TOKEN_OBTAIN_SERIALIZER": "apps.api.serializers.MyTokenObtainPairSerializer",
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": False,
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
-    "VERIFYING_KEY": None,
-    "AUDIENCE": None,
-    "ISSUER": None,
-    "JWK_URL": None,
-    "LEEWAY": 0,
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
-    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+    "REFRESH_KEY": env.str("REFRESH_KEY"),
 }
 
 
@@ -316,6 +296,12 @@ CACHES = {
     }
 }
 
+REDIS_CACHES = {
+    "REDIS_HOST": env.str("REDIS_HOST"),
+    "REDIS_PORT": env.int("REDIS_PORT"),
+    "REDIS_DB": env.int("REDIS_DB"),
+}
+
 # LOGGING
 # ------------------------------------------------------------------------------
 LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"
@@ -348,24 +334,10 @@ LOGGING = {
             ],
             "formatter": "standard",
         },
-        "debug_file": {
-            "level": "DEBUG",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": str(BASE_DIR / "logs/debug.log"),
-            "when": "H",
-            "backupCount": 24,
-        },
-        # "logging_file": {
-        #     "level": "INFO",
-        #     "class": "logging.handlers.RotatingFileHandler",
-        #     "filename": str(BASE_DIR / "logs/logging.log"),
-        #     "backupCount": 5,
-        #     "maxBytes": 5242880,
-        # },
     },
     "loggers": {
         "django": {
-            "handlers": ["debug_file"],
+            "handlers": ["console"],
             "level": "DEBUG",
             "propagate": True,
         },
@@ -374,13 +346,10 @@ LOGGING = {
             "level": "INFO",
             "propagate": True,
         },
-        # "django.request-response": {
-        #     "handlers": ["logging_file"],
-        #     "level": "INFO",
-        # },
     },
 }
-
+# OTHER
+# ------------------------------------------------------------------------------
 DOMAIN_URL = env.str("DOMAIN_URL")
 TOKEN_LIFESPAN = 24  # hrs
 CONN_HEALTH_CHECKS = True

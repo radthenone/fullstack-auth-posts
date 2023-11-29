@@ -1,92 +1,63 @@
 import logging
 
 from django.conf import settings
+import json
+from django.template.response import TemplateResponse
+from rest_framework.response import Response
 
 
 class CustomLoggingMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        self.logger = logging.getLogger(
-            getattr(settings, "loggers", "django.request-response")
-        )
+        self.logger = logging.getLogger(getattr(settings, "loggers", ""))
 
     def __call__(self, request):
-        if (
-            request.content_type == "application/json"
-            or request.content_type == "text/html"
-        ):
-            self.logger.info(
-                f"""
-                Incoming request: {request.method} {request.META["HTTP_HOST"]}{request.path}\n
-                Headers: {request.headers}\n
-                GET: {request.GET}\n
-                POST: {request.POST}\n
-                Content type: {request.content_type}\n
-                Cookies: {request.COOKIES}\n
-                Files: {request.FILES}\n
-                """
-            )
+        path = f"{request.scheme}://{request.META['HTTP_HOST']}{request.path}"
+        path_list = path.split("/")
+        if all(["__debug__" in path_list, "history_sidebar" in path_list]):
             response = self.get_response(request)
-            self.logger.info(
-                f"""
-                Outgoing response: {response.status_code}\n
-                Serialize: {response.serialize}\n
-                Headers: {response.headers}\n
-                Render: {response.render}\n
-                Content type: {response.content_type}\n
-                Cookies: {response.cookies}\n
-                Data: {response.data}\n
-                """
-            )
         else:
-            self.logger.info(
-                f"""
-                Incoming request: {request.method} {request.META["HTTP_HOST"]}{request.path}\n
-                Headers: {request.headers}\n
-                GET: {request.GET}\n
-                POST: {request.POST}\n
-                Content type: {request.content_type}\n
-                Cookies: {request.COOKIES}\n
-                Files: {request.FILES}\n
-                """
-            )
-            response = self.get_response(request)
+            if request.content_type == "application/json":
+                self.logger.info(
+                    f"REQUEST////////////////////////////////////////////////////////"
+                )
+                self.logger.info(f"Request USER: {request.user}")
+                self.process_request(request=request, path=path)
+                self.logger.info(
+                    f"RESPONSE////////////////////////////////////////////////////////"
+                )
+                response = self.get_response(request)
+                self.process_response(response=response)
+            else:
+                self.logger.info(
+                    f"REQUEST////////////////////////////////////////////////////////"
+                )
+                self.logger.info(f"Request USER: {request.user}")
+                self.process_request(request=request, path=path)
+                self.logger.info(
+                    f"RESPONSE////////////////////////////////////////////////////////"
+                )
+                response = self.get_response(request)
+                if isinstance(response, TemplateResponse):
+                    self.logger.info(response.rendered_content)
+                if isinstance(response, Response):
+                    self.logger.info(json.dumps(response.data, indent=2))
         return response
 
-    def process_view(self, _, view_func, view_args, view_kwargs):
-        self.logger.info(
-            f"Processing view: {view_func.__module__}.{view_func.__name__} \
-             with {view_args} and {view_kwargs}"
-        )
-        return None
+    def process_response(self, response):  # noqa
+        self.logger.info(f"Response STATUS: {response.status_code}")
+        self.logger.info(f"Response SERIALIZE: {response.serialize}")
+        self.logger.info(f"Response MEDIA_TYPE: {response.accepted_media_type}")
+        self.logger.info(f"Response _MEDIA_TYPE: {response.charset}")
+        self.logger.info(f"Response DATA: {response.data}")
+        self.logger.info(f"Response COOKIES: {response.cookies}")
+        self.logger.info(f"Response HEADERS: {response.headers}")
 
-    def process_response(self, _, response):  # noqa
-        self.logger.info(
-            f"""
-            Processing response: {response.status_code}\n
-            Serialize: {response.serialize}\n
-            Headers: {response.headers}\n
-            Content type: {response.content_type}\n
-            Cookies: {response.cookies}\n
-            Data: {response.data}\n
-            """
-        )
-        return response
-
-    def process_request(self, request):
-        self.logger.info(
-            f"""
-            Incoming request: {request.method} {request.path}\n
-            Headers: {request.headers}\n
-            GET: {request.GET}\n
-            POST: {request.POST}\n
-            Content type: {request.content_type}\n
-            Cookies: {request.COOKIES}\n
-            Files: {request.FILES}\n
-            """
-        )
-        return request
-
-    def process_exception(self, _, exception):  # noqa
-        self.logger.exception(exception)
-        return None
+    def process_request(self, request, path=None):
+        self.logger.info(f"Request URL: {path}")
+        self.logger.info(f"Request METHOD: {request.method}")
+        self.logger.info(f"Request GET: {request.GET}")
+        self.logger.info(f"Request POST: {request.POST}")
+        self.logger.info(f"Request FILES: {request.FILES}")
+        self.logger.info(f"Request COOKIES: {request.COOKIES}")
+        self.logger.info(f"Request HEADERS: {request.headers}")

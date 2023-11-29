@@ -1,3 +1,5 @@
+import uuid
+
 from apps.api.tokens import encode_token
 from apps.emails.utils import CreateMail
 from apps.users.models import User, UserBasic
@@ -76,6 +78,20 @@ class RegisterSerializer(serializers.ModelSerializer):
             "birth_date",
         )
 
+    # TODO check
+    def to_internal_value(self, data):
+        user_data = data.pop("user")
+        data["email"] = user_data.get("email")
+        data["password"] = user_data.get("password")
+        return super().to_internal_value(data)
+
+    # TODO check
+    def to_representation(self, instance):
+        user = instance.pop("user")
+        instance["email"] = user.get("email")
+        instance["password"] = user.get("password")
+        return super().to_representation(instance)
+
     def create(self, validated_data):
         email = validated_data.get("email")
         password = validated_data.get("password")
@@ -89,6 +105,28 @@ class RegisterSerializer(serializers.ModelSerializer):
             birth_date=validated_data.get("birth_date"),
         )
         return user
+
+
+class LoginRefreshSerializer(serializers.Serializer):
+    email = serializers.EmailField(write_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+
+        if email:
+            user = User.objects.get(email=email)
+
+            if user:
+                exp_minutes = 10
+                attrs["token"] = encode_token(
+                    payload={"email": email}, exp_minutes=exp_minutes
+                )
+                attrs["exp_minutes"] = exp_minutes
+                return attrs
+            else:
+                raise serializers.ValidationError({"email": "User does not exist"})
+        else:
+            raise serializers.ValidationError({"email": "Email is required"})
 
 
 class LoginSerializer(serializers.ModelSerializer):
