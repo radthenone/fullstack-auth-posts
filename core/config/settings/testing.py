@@ -45,9 +45,7 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
 }
 
-REST_FRAMEWORK += {
-    "TEST_REQUEST_DEFAULT_FORMAT": "json",
-}
+REST_FRAMEWORK.update({"TEST_REQUEST_DEFAULT_FORMAT": "json"})
 
 CACHES = {
     "default": {

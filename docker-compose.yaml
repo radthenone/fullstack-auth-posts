@@ -3,6 +3,8 @@ version: "3.9"
 volumes:
   postgres_data:
   mailhog_data:
+  static_volume:
+  media_volume:
 
 services:
   postgres:
@@ -27,6 +29,8 @@ services:
     container_name: fullstack_auth_django
     volumes:
       - ./core:/src:z
+      - static_volume:/src/staticfiles
+      - media_volume:/src/media
     env_file:
       - ./.envs/django.env
       - ./.envs/postgres.env

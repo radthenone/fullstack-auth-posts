@@ -85,19 +85,26 @@ def decode_token(
     Raises:
         jwt.InvalidSignatureError: If the token has an invalid signature.
     """
-    _token = handle_expired_token(token=token, key=key)
-    if isinstance(_token, dict):
-        return _token
-    else:
-        try:
-            payload = jwt.decode(
-                jwt=_token,
-                key=key,
-                algorithms=[settings.SIMPLE_JWT["ALGORITHM"]],
-            )
-        except jwt.InvalidSignatureError:
-            payload = {"errors": "Invalid token"}
-        return payload
+    try:
+        _token = handle_expired_token(token=token, key=key)
+        if isinstance(_token, dict):
+            return _token
+        else:
+            try:
+                payload = jwt.decode(
+                    jwt=_token,
+                    key=key,
+                    algorithms=[settings.SIMPLE_JWT["ALGORITHM"]],
+                )
+            except jwt.InvalidSignatureError:
+                payload = {"errors": "Invalid token"}
+            except jwt.ExpiredSignatureError:
+                payload = {"errors": "Token has expired"}
+            except jwt.DecodeError:
+                payload = {"errors": "Invalid token"}
+            return payload
+    except jwt.InvalidTokenError:
+        return {"errors": "Invalid token"}
 
 
 def handle_expired_token(token: str, key: str):

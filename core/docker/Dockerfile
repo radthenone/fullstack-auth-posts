@@ -15,11 +15,12 @@ ARG SRC=/src
 
 WORKDIR ${SRC}
 COPY pyproject.toml ./
+COPY poetry.lock ./
 
 RUN touch requirements.txt
 RUN poetry export --with dev -f requirements.txt --output requirements.txt
 RUN pip wheel --wheel-dir /usr/src/app/wheels \
-    -r requirements.txt && rm -rf $POETRY_CACHE_DIR
+    -r requirements.txt && rm -rf "$POETRY_CACHE_DIR"
 
 FROM build AS finally
 

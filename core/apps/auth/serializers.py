@@ -1,13 +1,12 @@
-import uuid
-
 from apps.api.tokens import encode_token
 from apps.emails.utils import CreateMail
-from apps.users.models import User, UserBasic
+from apps.users.models import User, UserBasic, Roles
 from apps.users.serializers import Validator as UserValidator
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
+from apps.files.fields import ResizeBase64ImageField
 
 
 class RegisterMailSerializer(serializers.Serializer):
@@ -44,6 +43,7 @@ class RegisterMailSerializer(serializers.Serializer):
             send_email=email,
             title="Register",
             extra_message={
+                "token": token,
                 "auth_url": f"{settings.DOMAIN_URL}/api/auth/register/{token}/",
             },
             info=f"Kindly use this token to verify your email. \
@@ -68,7 +68,11 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    user = RegisterUserSerializer()
+    user = RegisterUserSerializer(many=False, required=True)
+    avatar = ResizeBase64ImageField(
+        required=False,
+        size=(200, 200),
+    )
 
     class Meta:
         model = UserBasic
@@ -78,33 +82,31 @@ class RegisterSerializer(serializers.ModelSerializer):
             "birth_date",
         )
 
-    # TODO check
-    def to_internal_value(self, data):
-        user_data = data.pop("user")
-        data["email"] = user_data.get("email")
-        data["password"] = user_data.get("password")
-        return super().to_internal_value(data)
-
-    # TODO check
-    def to_representation(self, instance):
-        user = instance.pop("user")
-        instance["email"] = user.get("email")
-        instance["password"] = user.get("password")
-        return super().to_representation(instance)
-
     def create(self, validated_data):
-        email = validated_data.get("email")
-        password = validated_data.get("password")
-        user = User.objects.create_user(
-            email=email,
-            password=password,
-        )
-        UserBasic.objects.create(
-            user=user,
-            avatar=validated_data.get("avatar"),
-            birth_date=validated_data.get("birth_date"),
-        )
-        return user
+        try:
+            user_data = validated_data.pop("user")
+            user = User.objects.create(
+                email=user_data.get("email"),
+                change_password=True,
+                password=user_data.get("password"),
+            )
+            user.save()
+            user.roles.set([Roles.objects.get_basic_queryset()])
+            if user:
+                try:
+                    basic_user = UserBasic.objects.create(
+                        user=user,
+                        avatar=validated_data.get("avatar"),
+                        birth_date=validated_data.get("birth_date"),
+                    )
+                    basic_user.save()
+                    return basic_user
+                except Exception as error:
+                    raise serializers.ValidationError({"errors": f"{error}"})
+            else:
+                raise serializers.ValidationError({"errors": "User does not exist"})
+        except Exception as error:
+            raise serializers.ValidationError({"errors": f"{error}"})
 
 
 class LoginRefreshSerializer(serializers.Serializer):
@@ -114,19 +116,19 @@ class LoginRefreshSerializer(serializers.Serializer):
         email = attrs.get("email")
 
         if email:
-            user = User.objects.get(email=email)
-
-            if user:
+            try:
+                user = User.objects.get(email=email)
                 exp_minutes = 10
                 attrs["token"] = encode_token(
-                    payload={"email": email}, exp_minutes=exp_minutes
+                    payload={"email": user.email}, exp_minutes=exp_minutes
                 )
                 attrs["exp_minutes"] = exp_minutes
                 return attrs
-            else:
-                raise serializers.ValidationError({"email": "User does not exist"})
+
+            except User.DoesNotExist:
+                raise serializers.ValidationError({"errors": "User does not exist"})
         else:
-            raise serializers.ValidationError({"email": "Email is required"})
+            raise serializers.ValidationError({"errors": "Email is required"})
 
 
 class LoginSerializer(serializers.ModelSerializer):
