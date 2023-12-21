@@ -29,9 +29,11 @@ WORKDIR ${SRC}
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt update && apt install --no-install-recommends -y \
     libpq-dev \
-    procps
+    procps \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /usr/src/app/wheels  /wheels/
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \

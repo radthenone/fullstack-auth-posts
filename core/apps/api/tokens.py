@@ -3,6 +3,7 @@ from uuid import uuid4
 
 import jwt
 from django.conf import settings
+from jwt.exceptions import PyJWTError
 
 
 def encode_token(
@@ -18,7 +19,8 @@ def encode_token(
     """
     Encodes a token with the given payload and expiration times.
     Parameters:
-        payload (dict): A dictionary containing the payload data to be included in the token. Default is an empty dictionary.
+        payload (dict): A dictionary containing the payload data to be included in the token.
+        Default is an empty dictionary.
         key (str): The secret key to use for encoding the token. Default is the value of the JWT_SIGNING_KEY setting.
         headers (dict): A dictionary. Default is an empty dictionary.
         exp_weeks (int): The number of weeks until the token expires. Default is 0.
@@ -66,8 +68,8 @@ def encode_token(
             key=key,
             algorithm=settings.SIMPLE_JWT["ALGORITHM"],
         )
-    except ValueError as error:
-        return {"errors": str(error)}
+    except PyJWTError as error:
+        raise ValueError(error)
     return str(token)
 
 
@@ -83,45 +85,14 @@ def decode_token(
     Returns:
         dict: The payload of the decoded token.
     Raises:
-        jwt.InvalidSignatureError: If the token has an invalid signature.
+        jwt.PyJWTError: If the token has an invalid signature.
     """
     try:
-        _token = handle_expired_token(token=token, key=key)
-        if isinstance(_token, dict):
-            return _token
-        else:
-            try:
-                payload = jwt.decode(
-                    jwt=_token,
-                    key=key,
-                    algorithms=[settings.SIMPLE_JWT["ALGORITHM"]],
-                )
-            except jwt.InvalidSignatureError:
-                payload = {"errors": "Invalid token"}
-            except jwt.ExpiredSignatureError:
-                payload = {"errors": "Token has expired"}
-            except jwt.DecodeError:
-                payload = {"errors": "Invalid token"}
-            return payload
-    except jwt.InvalidTokenError:
-        return {"errors": "Invalid token"}
-
-
-def handle_expired_token(token: str, key: str):
-    payload = jwt.decode(
-        jwt=token,
-        key=key,
-        algorithms=[settings.SIMPLE_JWT["ALGORITHM"]],
-        options={"verify_signature": False},
-    )
-    now = datetime.now()
-    exp_datetime = datetime.fromtimestamp(payload.get("exp"))
-    iat_datetime = datetime.fromtimestamp(payload.get("iat"))
-    if iat_datetime <= now <= exp_datetime:
-        return token
-    else:
-        return {"errors": "Token has expired"}
-
-
-def headers_token(token: str):
-    return jwt.get_unverified_header(token)
+        payload = jwt.decode(
+            jwt=token,
+            key=key,
+            algorithms=[settings.SIMPLE_JWT["ALGORITHM"]],
+        )
+        return payload
+    except PyJWTError as error:
+        raise ValueError(error)

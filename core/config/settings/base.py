@@ -282,25 +282,6 @@ SPECTACULAR_SETTINGS = {
     ],
 }
 
-# CACHES
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/4.1/topics/cache/#redis
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env("REDIS_URL"),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-    }
-}
-
-REDIS_CACHES = {
-    "REDIS_HOST": env.str("REDIS_HOST"),
-    "REDIS_PORT": env.int("REDIS_PORT"),
-    "REDIS_DB": env.int("REDIS_DB"),
-}
-
 # LOGGING
 # ------------------------------------------------------------------------------
 LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"

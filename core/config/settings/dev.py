@@ -21,11 +21,11 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env("REDIS_URL"),
+        "LOCATION": f"redis://{env.str('REDIS_HOST')}:{env.str('REDIS_PORT')}/{env.str('REDIS_DB')}",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-    }
+    },
 }
 
 # EMAIL

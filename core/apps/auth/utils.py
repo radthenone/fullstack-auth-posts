@@ -2,7 +2,7 @@ from apps.api.tokens import encode_token
 from apps.users.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest
-from config.redis import cache
+from django.core.cache import cache
 from typing import Optional
 from rest_framework import exceptions
 from django.conf import settings
@@ -29,13 +29,13 @@ def refresh_token(user: Optional[User] = None) -> None:
         "user_email": user.email,
     }
     cache.set(
-        name=f"refresh_token_{user.id}",
+        key=f"refresh_{str(user.id)}",
         value=encode_token(
             payload=payload,
             exp_days=14,
             key=settings.SIMPLE_JWT["REFRESH_KEY"],
         ),
-        ex=datetime.timedelta(days=14),
+        timeout=datetime.timedelta(days=14).total_seconds(),
     )
 
 
@@ -45,9 +45,11 @@ def auth_login(request: HttpRequest, email: str, password: str) -> dict[str, str
         login(request, user)
         refresh_token(user=user)
         return {
-            "access_token": access_token(user=user),
-            "refresh_token": str(
-                cache.get(name=f"refresh_token_{user.id}").decode("utf-8")
+            "access": access_token(user=user),
+            "refresh": str(
+                cache.get(
+                    key=f"refresh_{user.id}",
+                )
             ),
         }
     raise exceptions.AuthenticationFailed("Invalid credentials")
@@ -66,9 +68,11 @@ def auth_refresh(user: User) -> dict[str, str]:
     if isinstance(user, User):
         refresh_token(user=user)
         return {
-            "access_token": access_token(user=user),
-            "refresh_token": str(
-                cache.get(name=f"refresh_token_{user.id}").decode("utf-8")
+            "access": access_token(user=user),
+            "refresh": str(
+                cache.get(
+                    key=f"refresh_{user.id}",
+                )
             ),
         }
     raise exceptions.AuthenticationFailed("Invalid credentials")
