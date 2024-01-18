@@ -1,9 +1,10 @@
-from apps.emails.utils import send_mail
-from config.celery import app
-from apps.users.models import User
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from config.celery import app
+
 from apps.api.tokens import decode_token
+from apps.emails.utils import send_mail
+from apps.users.models import User
 
 logger = get_task_logger(__name__)
 

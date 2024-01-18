@@ -1,9 +1,20 @@
+from config.schemas import get_schema
+from django.conf import settings
+from django.contrib.auth.hashers import check_password
+from drf_spectacular.utils import (
+    OpenApiResponse,
+    extend_schema,
+)
+from rest_framework import exceptions, generics, permissions, status
+from rest_framework.response import Response
+
+from apps.api.permissions import UnAuthenticated
 from apps.api.tokens import decode_token
 from apps.auth.serializers import (
+    LoginRefreshSerializer,
     LoginSerializer,
     RegisterMailSerializer,
     RegisterSerializer,
-    LoginRefreshSerializer,
 )
 from apps.auth.utils import (
     auth_headers_jwt,
@@ -11,19 +22,9 @@ from apps.auth.utils import (
     auth_logout,
     auth_refresh,
 )
-from apps.emails.tasks import send_register_email, send_refresh_token_email
-from django.contrib.auth.hashers import check_password
-from rest_framework import generics, status, permissions, exceptions
-from rest_framework.response import Response
+from apps.emails.tasks import send_refresh_token_email, send_register_email
 from apps.emails.utils import CreateMail
-from django.conf import settings
 from apps.users.models import User
-from drf_spectacular.utils import (
-    extend_schema,
-    OpenApiResponse,
-)
-from config.schemas import get_schema
-from apps.api.permissions import UnAuthenticated
 
 
 class RegisterMailView(generics.GenericAPIView):
@@ -223,8 +224,7 @@ class LoginView(generics.GenericAPIView):
         if serializer.is_valid(raise_exception=True):
             try:
                 data = auth_login(request=request, **serializer.validated_data)
-                headers = auth_headers_jwt(data["access"])
-                return Response(data=data, headers=headers, status=status.HTTP_200_OK)
+                return Response(data=data, status=status.HTTP_200_OK)
             except exceptions.AuthenticationFailed as error:
                 return Response(
                     {"errors": error.detail},
@@ -239,6 +239,7 @@ class LoginRefreshMailView(generics.GenericAPIView):
     """
 
     serializer_class = LoginRefreshSerializer
+    permission_classes = [UnAuthenticated]
     login_refresh_mail_schema = get_schema("auth").get("login_refresh_mail_view")
 
     @extend_schema(
@@ -297,6 +298,7 @@ class LoginRefreshMailView(generics.GenericAPIView):
 
 
 class LoginRefreshView(generics.GenericAPIView):
+    permission_classes = [UnAuthenticated]
     """
     Login user refresh
     """

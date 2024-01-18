@@ -1,5 +1,8 @@
-from config.env import env
 from config.settings.base import *  # noqa
+import environ  # noqa
+
+environ.Env.read_env(str(BASE_DIR / ".envs" / "testing.env"))
+env = environ.Env()
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -52,3 +55,24 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
+
+BROKER_BACKEND = "memory"
+CELERY_ALWAYS_EAGER = True
+CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+CELERY_BROKER_URL = "memory://"
+CELERY_RESULT_BACKEND = "cache+memory://"
+
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env.get_value(var="POSTGRES_HOST", default="localhost"),
+        "PORT": env.get_value(var="POSTGRES_PORT", default="5433"),
+        "NAME": env.get_value(var="POSTGRES_DB", default="test"),
+        "USER": env.get_value(var="POSTGRES_USER", default="test"),
+        "PASSWORD": env.get_value(var="POSTGRES_PASSWORD", default="test"),
+        "ATOMIC_REQUESTS": True,
+    }
+}
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

@@ -1,12 +1,15 @@
+import datetime
+from typing import Optional
+
+from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.core.cache import cache
+from django.http import HttpRequest
+from rest_framework import exceptions
+
 from apps.api.tokens import encode_token
 from apps.users.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpRequest
-from django.core.cache import cache
-from typing import Optional
-from rest_framework import exceptions
-from django.conf import settings
-import datetime
+from redis.exceptions import RedisError
 
 
 def access_token(user: Optional[User] = None) -> str:
@@ -28,15 +31,18 @@ def refresh_token(user: Optional[User] = None) -> None:
         "user_id": str(user.id),
         "user_email": user.email,
     }
-    cache.set(
-        key=f"refresh_{str(user.id)}",
-        value=encode_token(
-            payload=payload,
-            exp_days=14,
-            key=settings.SIMPLE_JWT["REFRESH_KEY"],
-        ),
-        timeout=datetime.timedelta(days=14).total_seconds(),
-    )
+    try:
+        cache.set(
+            key=f"refresh_{str(user.id)}",
+            value=encode_token(
+                payload=payload,
+                exp_days=14,
+                key=settings.SIMPLE_JWT["REFRESH_KEY"],
+            ),
+            timeout=datetime.timedelta(days=14).total_seconds(),
+        )
+    except RedisError as error:
+        raise exceptions.ValidationError(error)
 
 
 def auth_login(request: HttpRequest, email: str, password: str) -> dict[str, str]:

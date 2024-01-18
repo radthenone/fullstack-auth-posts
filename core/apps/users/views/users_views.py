@@ -1,8 +1,3 @@
-from apps.users.models import User, UserBasic, UserPremium
-from apps.users.serializers import (
-    BasicUserSerializer,
-    PremiumUserSerializer,
-)
 from django.db.models import Model
 from django.shortcuts import get_list_or_404, get_object_or_404
 from drf_spectacular.utils import (
@@ -11,8 +6,13 @@ from drf_spectacular.utils import (
 from rest_framework import generics, mixins, permissions, status
 from rest_framework.response import Response
 
+from apps.users.models import User, UserBasic, UserPremium
+from apps.users.serializers import (
+    BasicUserSerializer,
+    PremiumUserSerializer,
+)
 
-# TODO separate BasicUserSerializer and PremiumUserSerializer
+
 class UserListView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     tag_name = "users"

@@ -1,9 +1,10 @@
-from apps.users.models import Roles, User, UserBasic, UserPremium
-from apps.users.utils import set_username
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+
+from apps.users.models import Roles, User, UserBasic, UserPremium
+from apps.users.utils import set_username
 
 
 class UserForm(UserChangeForm):

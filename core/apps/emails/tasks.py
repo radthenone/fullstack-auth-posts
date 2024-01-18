@@ -1,8 +1,9 @@
 import logging
 
-from apps.emails.utils import send_mail
 from celery import shared_task
 from django.conf import settings
+
+from apps.emails.utils import send_mail
 
 
 @shared_task

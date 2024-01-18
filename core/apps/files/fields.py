@@ -1,7 +1,9 @@
-from rest_framework import fields
-from apps.files.services import ImageService
 import base64
 from typing import Optional
+
+from rest_framework import fields
+
+from apps.files.services import ImageService
 
 
 class ResizeBase64ImageField(fields.ImageField):

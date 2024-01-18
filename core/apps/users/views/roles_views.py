@@ -1,5 +1,3 @@
-from apps.users.models import Roles
-from apps.users.serializers import RolesSerializer
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import (
     OpenApiParameter,
@@ -9,6 +7,9 @@ from drf_spectacular.utils import (
 from rest_framework import permissions, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import Response
+
+from apps.users.models import Roles
+from apps.users.serializers import RolesSerializer
 
 
 class RolesListView(GenericAPIView):

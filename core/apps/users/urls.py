@@ -1,5 +1,7 @@
 from typing import Any
 
+from django.urls import path
+
 from apps.users.views import (
     FriendRequestView,
     FriendResponseDetailView,
@@ -9,7 +11,6 @@ from apps.users.views import (
     UserDetailView,
     UserListView,
 )
-from django.urls import path
 
 urlpatterns: Any = [
     # users

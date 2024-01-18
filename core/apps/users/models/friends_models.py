@@ -1,7 +1,8 @@
-from apps.users.models.abstract_models import CreatedUpdatedMixin
-from django.db import models
 from django.conf import settings
+from django.db import models
+
 from apps.users.managers import CustomFriendshipManager
+from apps.users.models.abstract_models import CreatedUpdatedMixin
 
 
 class Friendship(CreatedUpdatedMixin):
@@ -19,6 +20,9 @@ class Friendship(CreatedUpdatedMixin):
     is_blocked = models.BooleanField(default=False)
 
     objects = CustomFriendshipManager()
+
+    class Meta:
+        unique_together = ("from_user", "to_user")
 
     def __str__(self):
         return f"{self.from_user} -> {self.to_user}"

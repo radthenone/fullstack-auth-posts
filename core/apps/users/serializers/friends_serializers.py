@@ -1,7 +1,8 @@
-from apps.users.models import User
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+
+from apps.users.models import User
 
 
 class Validators:

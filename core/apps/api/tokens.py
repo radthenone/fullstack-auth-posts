@@ -15,7 +15,7 @@ def encode_token(
     exp_hours: int = 0,
     exp_minutes: int = 0,
     exp_seconds: int = 0,
-):
+) -> str:
     """
     Encodes a token with the given payload and expiration times.
     Parameters:
@@ -76,7 +76,7 @@ def encode_token(
 def decode_token(
     token: str,
     key: str = settings.SIMPLE_JWT["SIGNING_KEY"],
-):
+) -> dict:
     """
     Decodes a token and returns its payload.
     Args:

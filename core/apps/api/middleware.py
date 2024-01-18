@@ -1,7 +1,7 @@
+import json
 import logging
 
 from django.conf import settings
-import json
 from django.template.response import TemplateResponse
 from rest_framework.response import Response
 
@@ -19,23 +19,23 @@ class CustomLoggingMiddleware:
         else:
             if request.content_type == "application/json":
                 self.logger.info(
-                    f"REQUEST////////////////////////////////////////////////////////"
+                    "REQUEST////////////////////////////////////////////////////////"
                 )
                 self.logger.info(f"Request USER: {request.user}")
                 self.process_request(request=request, path=path)
                 self.logger.info(
-                    f"RESPONSE////////////////////////////////////////////////////////"
+                    "RESPONSE////////////////////////////////////////////////////////"
                 )
                 response = self.get_response(request)
                 self.process_response(response=response)
             else:
                 self.logger.info(
-                    f"REQUEST////////////////////////////////////////////////////////"
+                    "REQUEST////////////////////////////////////////////////////////"
                 )
                 self.logger.info(f"Request USER: {request.user}")
                 self.process_request(request=request, path=path)
                 self.logger.info(
-                    f"RESPONSE////////////////////////////////////////////////////////"
+                    "RESPONSE////////////////////////////////////////////////////////"
                 )
                 response = self.get_response(request)
                 if isinstance(response, TemplateResponse):

@@ -1,11 +1,12 @@
-from PIL import Image
-from io import BytesIO
 import base64
-from typing import Optional
 import uuid
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.exceptions import ValidationError
+from io import BytesIO
+from typing import Optional
+
 import filetype
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
+from PIL import Image
 
 
 class ImageService:

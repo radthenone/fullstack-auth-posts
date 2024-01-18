@@ -6,10 +6,10 @@ from django.core import validators
 from django.db import models
 
 from apps.users.managers import CustomUserManager
-from apps.users.utils import set_username
 from apps.users.models.abstract_models import ProfileMixin
 from apps.users.models.friends_models import Friendship
 from apps.users.models.roles_models import Roles
+from apps.users.utils import set_username
 
 
 # Create your models here.
@@ -38,6 +38,7 @@ class User(AbstractUser):
         to="self",
         blank=True,
         through=Friendship,
+        through_fields=("from_user", "to_user"),
         symmetrical=True,
     )
     friend_requests = models.JSONField(default=dict, blank=True)

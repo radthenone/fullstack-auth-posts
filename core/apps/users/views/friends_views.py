@@ -1,9 +1,3 @@
-from apps.api.tokens import decode_token, encode_token
-from apps.users.serializers import (
-    FriendRequestSerializer,
-    FriendResponseDetailSerializer,
-    FriendResponseSerializer,
-)
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import (
@@ -12,9 +6,14 @@ from drf_spectacular.utils import (
 from rest_framework import generics, mixins, permissions, status
 from rest_framework.response import Response
 
-from apps.users.types import UserModelType
+from apps.api.tokens import decode_token, encode_token
 from apps.users.models import Friendship
-from django.conf import settings
+from apps.users.serializers import (
+    FriendRequestSerializer,
+    FriendResponseDetailSerializer,
+    FriendResponseSerializer,
+)
+from apps.users.types import UserModelType
 
 
 class FriendRequestView(generics.GenericAPIView):
@@ -144,12 +143,12 @@ class FriendResponseDetailView(
         friendship.is_accepted = True
         friendship.save()
         user.friends.add(friendship, through_defaults={})
-        if sender.email in user.friend_requests.keys():
+        if sender.email in user.friend_requests:
             del user.friend_requests[sender.email]
             user.save()
 
     @staticmethod
     def handle_reject_request(user: "UserModelType", sender: "UserModelType"):
-        if sender.email in user.friend_requests.keys():
+        if sender.email in user.friend_requests:
             del user.friend_requests[sender.email]
             user.save()

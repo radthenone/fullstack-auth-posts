@@ -1,5 +1,7 @@
 from typing import Any
 
+from django.urls import path
+
 from apps.auth.views import (
     LoginRefreshMailView,
     LoginRefreshView,
@@ -8,7 +10,6 @@ from apps.auth.views import (
     RegisterMailView,
     RegisterView,
 )
-from django.urls import path
 
 urlpatterns: Any = [
     path("register/", RegisterMailView.as_view(), name="register-mail"),

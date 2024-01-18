@@ -94,12 +94,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -224,18 +218,6 @@ SIMPLE_JWT = {
     "SIGNING_KEY": SECRET_KEY,
     "REFRESH_KEY": env.str("REFRESH_KEY"),
 }
-
-
-# EMAIL
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env("EMAIL_BACKEND")
-DEFAULT_EMAIL = env.str("DEFAULT_EMAIL")
-EMAIL_HOST = env.str("EMAIL_HOST")
-EMAIL_PORT = env.str("EMAIL_PORT")
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-EMAIL_USE_TLS = False
 
 # DJANGO-CORS-HEADERS
 # ------------------------------------------------------------------------------

@@ -1,12 +1,13 @@
-from apps.api.tokens import encode_token
-from apps.emails.utils import CreateMail
-from apps.users.models import User, UserBasic, Roles
-from apps.users.serializers import Validator as UserValidator
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
+
+from apps.api.tokens import encode_token
+from apps.emails.utils import CreateMail
 from apps.files.fields import ResizeBase64ImageField
+from apps.users.models import Roles, User, UserBasic
+from apps.users.serializers import Validator as UserValidator
 
 
 class RegisterMailSerializer(serializers.Serializer):

@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from django.conf import settings
-from apps.users.utils import avatar_upload_path
 from django.core import exceptions
 from django.db import models
-from datetime import datetime
+
+from apps.users.utils import avatar_upload_path
 
 
 # Create your models here.

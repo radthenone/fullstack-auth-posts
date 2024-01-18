@@ -1,6 +1,7 @@
-from apps.users.models import User, UserBasic, UserPremium, ProfileMixin
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
+
+from apps.users.models import ProfileMixin, User, UserBasic, UserPremium
 
 
 class Validator:
