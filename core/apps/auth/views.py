@@ -1,10 +1,5 @@
-from config.schemas import get_schema
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
-from drf_spectacular.utils import (
-    OpenApiResponse,
-    extend_schema,
-)
 from rest_framework import exceptions, generics, permissions, status
 from rest_framework.response import Response
 
@@ -25,6 +20,14 @@ from apps.auth.utils import (
 from apps.emails.tasks import send_refresh_token_email, send_register_email
 from apps.emails.utils import CreateMail
 from apps.users.models import User
+from apps.auth.schema import (
+    register_mail_schema,
+    register_schema,
+    login_schema,
+    login_refresh_mail_schema,
+    login_refresh_schema,
+    logout_schema,
+)
 
 
 class RegisterMailView(generics.GenericAPIView):
@@ -34,50 +37,8 @@ class RegisterMailView(generics.GenericAPIView):
 
     serializer_class = RegisterMailSerializer
     permission_classes = [permissions.AllowAny]
-    register_mail_schema = get_schema("auth").get("register_mail_view")
 
-    @extend_schema(
-        tags=["auth"],
-        description="""
-        Mail register user \n
-        Panel to send first register data with mail, then gets token to verify register panel in next registry step.
-        """,
-        request={
-            "application/json": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "example": register_mail_schema["value"]["email"],
-                    },
-                    "password": {
-                        "type": "string",
-                        "example": register_mail_schema["value"]["password"],
-                    },
-                    "password2": {
-                        "type": "string",
-                        "example": register_mail_schema["value"]["password2"],
-                    },
-                },
-            }
-        },
-        responses={
-            status.HTTP_201_CREATED: OpenApiResponse(
-                response={
-                    "example": {
-                        "detail": f"Register email sent to {register_mail_schema['value']['email']}",
-                    }
-                }
-            ),
-            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                response={
-                    "example": {
-                        "errors": "Invalid credentials",
-                    }
-                }
-            ),
-        },
-    )
+    @register_mail_schema
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -98,50 +59,8 @@ class RegisterView(generics.GenericAPIView):
 
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
-    register_schema = get_schema("auth").get("register_user_view")
 
-    @extend_schema(
-        tags=["auth"],
-        description="""
-        Register user \n
-        Basic user panel creator.
-        """,
-        request={
-            "application/json": {
-                "type": "object",
-                "properties": {
-                    "user": {
-                        "type": "object",
-                        "example": register_schema["value"]["user"],
-                    },
-                    "avatar": {
-                        "type": "string",
-                        "example": register_schema["value"]["avatar"],
-                    },
-                    "birth_date": {
-                        "type": "string",
-                        "example": register_schema["value"]["birth_date"],
-                    },
-                },
-            }
-        },
-        responses={
-            status.HTTP_201_CREATED: OpenApiResponse(
-                response={
-                    "example": {
-                        "detail": f"User created successfully {register_schema['value']['user']['email']}",
-                    }
-                }
-            ),
-            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                response={
-                    "example": {
-                        "errors": "Invalid credentials",
-                    }
-                }
-            ),
-        },
-    )
+    @register_schema
     def post(self, request, token):
         data = decode_token(token)
         if "errors" in data:
@@ -174,51 +93,8 @@ class LoginView(generics.GenericAPIView):
 
     serializer_class = LoginSerializer
     permission_classes = [UnAuthenticated]
-    login_schema = get_schema("auth").get("login_view")
 
-    @extend_schema(
-        tags=["auth"],
-        description="Login user",
-        request={
-            "application/json": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "example": login_schema["value"]["email"],
-                    },
-                    "password": {
-                        "type": "string",
-                        "example": login_schema["value"]["password"],
-                    },
-                },
-            }
-        },
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(
-                response={
-                    "properties": {
-                        "access": {"type": "string"},
-                        "refresh": {"type": "string"},
-                    }
-                },
-            ),
-            status.HTTP_401_UNAUTHORIZED: OpenApiResponse(
-                response={
-                    "example": {
-                        "errors": "Token is invalid or expired",
-                    }
-                },
-            ),
-            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                response={
-                    "example": {
-                        "errors": "Invalid credentials",
-                    }
-                }
-            ),
-        },
-    )
+    @login_schema
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -240,39 +116,8 @@ class LoginRefreshMailView(generics.GenericAPIView):
 
     serializer_class = LoginRefreshSerializer
     permission_classes = [UnAuthenticated]
-    login_refresh_mail_schema = get_schema("auth").get("login_refresh_mail_view")
 
-    @extend_schema(
-        tags=["auth"],
-        description="Login user refresh mail",
-        request={
-            "application/json": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "example": login_refresh_mail_schema["value"]["email"],
-                    }
-                },
-            }
-        },
-        responses={
-            status.HTTP_201_CREATED: OpenApiResponse(
-                response={
-                    "example": {
-                        "detail": "Login refresh email sent",
-                    }
-                }
-            ),
-            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                response={
-                    "example": {
-                        "errors": "Invalid credentials",
-                    }
-                }
-            ),
-        },
-    )
+    @login_refresh_mail_schema
     def post(self, request):
         email = request.data.get("email")
         serializer = self.serializer_class(data={"email": email})
@@ -304,33 +149,7 @@ class LoginRefreshView(generics.GenericAPIView):
     """
 
     @classmethod
-    @extend_schema(
-        tags=["auth"],
-        description="""
-        Refresh login user \n
-        Send token from email response
-        """,
-        request={
-            "type": "object",
-            "properties": {
-                "token": {"type": "string"},
-            },
-            "required": ["token"],
-        },
-        responses={
-            status.HTTP_200_OK: {
-                "type": "object",
-                "properties": {
-                    "access": {"type": "string"},
-                    "refresh": {"type": "string"},
-                },
-            },
-            status.HTTP_400_BAD_REQUEST: {
-                "type": "string",
-                "example": {"errors": "Invalid token"},
-            },
-        },
-    )
+    @login_refresh_schema
     def get(cls, request, token):
         if token:
             data = decode_token(token)
@@ -353,21 +172,7 @@ class LogoutView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     @classmethod
-    @extend_schema(
-        tags=["auth"],
-        description="Logout",
-        responses={
-            status.HTTP_200_OK: {
-                "type": "object",
-                "properties": {
-                    "detail": {
-                        "type": "string",
-                        "example": "Successfully logged out",
-                    },
-                },
-            }
-        },
-    )
+    @logout_schema
     def get(cls, request):
         message = auth_logout(request)
         return Response(message, status=status.HTTP_200_OK)
