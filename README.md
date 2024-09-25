@@ -26,9 +26,3 @@
   docker-compose stop django
   docker-compose stop frontend
 ```
-
-## Run tests
-
-```shell
-  npm run test
-```
