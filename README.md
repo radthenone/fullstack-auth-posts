@@ -26,8 +26,3 @@
   docker-compose stop django
   docker-compose stop frontend
 ```
-
-#### Run tests
-```shell
-  docker-compose run django python manage.py test
-```
