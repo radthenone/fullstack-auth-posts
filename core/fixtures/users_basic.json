@@ -1,0 +1,14 @@
+[
+  {
+    "model": "users.userbasic",
+    "pk": "5a9a9f00-7431-4467-a4d9-81aa11cfe60e",
+    "fields": {
+      "avatar": "avatars/c@c.com/2023/12/21/c6968924-c8c6-4e98-9666-c68a261e5fb1.png",
+      "created_at": "2023-12-21T10:58:43.016Z",
+      "updated_at": "2023-12-21T10:58:43.039Z",
+      "birth_date": "2000-11-29",
+      "is_basic": true,
+      "is_premium": false
+    }
+  }
+]

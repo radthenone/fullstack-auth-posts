@@ -1,0 +1,26 @@
+[
+  {
+    "model": "users.roles",
+    "pk": 1,
+    "fields": {
+      "name": "ADMIN",
+      "description": "Admin role"
+    }
+  },
+  {
+    "model": "users.roles",
+    "pk": 2,
+    "fields": {
+      "name": "BASIC",
+      "description": "Basic role"
+    }
+  },
+  {
+    "model": "users.roles",
+    "pk": 3,
+    "fields": {
+      "name": "PREMIUM",
+      "description": "Premium role"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "model": "users.userpremium",
+    "pk": "20594aca-0ada-474d-a393-34ce9221a1bf",
+    "fields": {
+      "avatar": "",
+      "created_at": "2023-12-06T10:54:06.807Z",
+      "updated_at": "2023-12-06T10:54:06.807Z",
+      "birth_date": null,
+      "is_basic": false,
+      "is_premium": true
+    }
+  }
+]
