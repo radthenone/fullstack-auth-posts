@@ -11,11 +11,11 @@ from apps.users.serializers import (
     BasicUserSerializer,
     PremiumUserSerializer,
 )
+from apps.users.schema import users_schema
 
 
 class UserListView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    tag_name = "users"
 
     def get_queryset(self):
         return get_list_or_404(User.objects.prefetch_related("roles"))
@@ -26,14 +26,7 @@ class UserListView(generics.GenericAPIView):
         elif isinstance(instance, UserPremium):
             return PremiumUserSerializer
 
-    @extend_schema(
-        tags=[tag_name],
-        description="List all users",
-        request=BasicUserSerializer,
-        responses={
-            status.HTTP_200_OK: [PremiumUserSerializer, BasicUserSerializer],
-        },
-    )
+    @users_schema
     def get(self, request):
         queryset = self.get_queryset()
         data = []
