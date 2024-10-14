@@ -1,18 +1,17 @@
 import json
+import logging
 from enum import Enum
 from typing import Optional
 from uuid import uuid4
-from apps.users.models import ProfileMixin
-import factory
-from factory import fuzzy
-from apps.users.models import User
 
+import factory
+from apps.api.tokens import encode_token
+from apps.users.models import ProfileMixin, User
+from apps.users.types import UserModelType
+from django.db.models.signals import post_save
+from factory import fuzzy
 from faker import Faker
 from faker.providers import internet, misc
-from django.db.models.signals import post_save
-from apps.api.tokens import encode_token
-from apps.users.types import UserModelType
-import logging
 
 faker = Faker()
 faker.add_provider(internet)
