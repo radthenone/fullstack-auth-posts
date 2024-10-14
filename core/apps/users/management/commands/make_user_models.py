@@ -1,5 +1,6 @@
-from django.core.management.base import BaseCommand
 import logging
+
+from django.core.management.base import BaseCommand
 from tests.users.factories import UserFactory
 
 logger = logging.getLogger(__name__)

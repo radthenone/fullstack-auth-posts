@@ -1,17 +1,19 @@
-import pytest
-from pytest_factoryboy import register
-from tests.users.factories import (
-    UserFactory,
-    UserBasicFactory,
-    UserPremiumFactory,
-    RolesFactory,
-    FriendshipFactory,
-)
-from apps.auth.utils import encode_token
 import base64
 from io import BytesIO
-from PIL import Image
+
+import pytest
+from apps.auth.utils import encode_token
 from django.contrib.auth.hashers import make_password
+from PIL import Image
+from pytest_factoryboy import register
+
+from tests.users.factories import (
+    FriendshipFactory,
+    RolesFactory,
+    UserBasicFactory,
+    UserFactory,
+    UserPremiumFactory,
+)
 
 
 @pytest.fixture(scope="function")
