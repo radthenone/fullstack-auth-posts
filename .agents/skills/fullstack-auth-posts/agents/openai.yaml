@@ -1,0 +1,6 @@
+interface:
+  display_name: "Fullstack Auth Posts"
+  short_description: "Repo-specific patterns and workflows for fullstack-auth-posts"
+  default_prompt: "Use the fullstack-auth-posts repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true
