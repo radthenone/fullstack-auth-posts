@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-from django.urls import reverse
 import pytest
 from django.contrib.auth.hashers import check_password, make_password
+from django.urls import reverse
 
 pytestmark = pytest.mark.django_db
 

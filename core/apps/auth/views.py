@@ -5,6 +5,14 @@ from rest_framework.response import Response
 
 from apps.api.permissions import UnAuthenticated
 from apps.api.tokens import decode_token
+from apps.auth.schema import (
+    login_refresh_mail_schema,
+    login_refresh_schema,
+    login_schema,
+    logout_schema,
+    register_mail_schema,
+    register_schema,
+)
 from apps.auth.serializers import (
     LoginRefreshSerializer,
     LoginSerializer,
@@ -12,7 +20,6 @@ from apps.auth.serializers import (
     RegisterSerializer,
 )
 from apps.auth.utils import (
-    auth_headers_jwt,
     auth_login,
     auth_logout,
     auth_refresh,
@@ -20,14 +27,6 @@ from apps.auth.utils import (
 from apps.emails.tasks import send_refresh_token_email, send_register_email
 from apps.emails.utils import CreateMail
 from apps.users.models import User
-from apps.auth.schema import (
-    register_mail_schema,
-    register_schema,
-    login_schema,
-    login_refresh_mail_schema,
-    login_refresh_schema,
-    logout_schema,
-)
 
 
 class RegisterMailView(generics.GenericAPIView):
