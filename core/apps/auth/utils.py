@@ -5,11 +5,11 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.core.cache import cache
 from django.http import HttpRequest
+from redis.exceptions import RedisError
 from rest_framework import exceptions
 
 from apps.api.tokens import encode_token
 from apps.users.models import User
-from redis.exceptions import RedisError
 
 
 def access_token(user: Optional[User] = None) -> str:

@@ -1,19 +1,4 @@
-from apps.users.models import (
-    User,
-    UserBasic,
-    UserPremium,
-    Roles,
-    Friendship,
-)
-from tests.users.factories import (
-    UserFactory,
-    UserBasicFactory,
-    UserPremiumFactory,
-    RolesFactory,
-    FriendshipFactory,
-)
 import pytest
-from apps.api.tokens import encode_token
 
 
 @pytest.mark.django_db
