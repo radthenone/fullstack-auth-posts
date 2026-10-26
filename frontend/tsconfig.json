@@ -1,55 +1,51 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
-        "module": "ESNext",
-        "skipLibCheck": true,
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
+    "module": "ESNext",
+    "skipLibCheck": true,
 
-        /* Bundler mode */
-        "esModuleInterop": true,
-        "moduleResolution": "Node",
-        "allowImportingTsExtensions": true,
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
-        "jsx": "react-jsx",
+    /* Bundler mode */
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
 
-        /* Linting */
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
 
-        "baseUrl": "./src",
-        "types": ["node","@testing-library/jest-dom"],
-        "paths": {
-            "@/*": ["*"],
-            "app/*": ["app/*"],
-            "assets/*": ["assets/*"],
-            "components/*": ["components/*"],
-            "context/*": ["context/*"],
-            "data/*": ["data/*"],
-            "features/*": ["features/*"],
-            "layouts/*": ["layouts/*"],
-            "lib/*": ["lib/*"],
-            "pages/*": ["pages/*"],
-            "services/*": ["services/*"],
-            "utils/*": ["utils/*"],
-            "server/*": ["server/*"],
-            "types/*": ["types/*"],
-            "styles/*": ["styles/*"],
-            "constants/*": ["constants/*"],
-            "tests/*": ["tests/*"]
-        }
-    },
-    "include": ["src",
-        "tests",
-        "vite.config.ts",
-        "node_modules/vitest/globals.d.ts",
-    ],
-    "exclude": ["node_modules", "dist"],
-    "optimizeDeps": {
-        "include": ["@testing-library/jest-dom/vitest", "@testing-library/react"]
-    },
-    "references": [{ "path": "./tsconfig.node.json" }]
+    "baseUrl": "./src",
+    "types": ["node", "@testing-library/jest-dom"],
+    "paths": {
+      "@/*": ["*"],
+      "app/*": ["app/*"],
+      "assets/*": ["assets/*"],
+      "components/*": ["components/*"],
+      "context/*": ["context/*"],
+      "data/*": ["data/*"],
+      "features/*": ["features/*"],
+      "layouts/*": ["layouts/*"],
+      "lib/*": ["lib/*"],
+      "pages/*": ["pages/*"],
+      "services/*": ["services/*"],
+      "utils/*": ["utils/*"],
+      "server/*": ["server/*"],
+      "types/*": ["types/*"],
+      "styles/*": ["styles/*"],
+      "constants/*": ["constants/*"],
+      "tests/*": ["tests/*"]
+    }
+  },
+  "include": ["src", "tests", "vite.config.ts", "node_modules/vitest/globals.d.ts"],
+  "exclude": ["node_modules", "dist"],
+  "optimizeDeps": {
+    "include": ["@testing-library/jest-dom/vitest", "@testing-library/react"]
+  },
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
