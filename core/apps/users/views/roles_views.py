@@ -18,7 +18,7 @@ class RolesListView(GenericAPIView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = Roles.objects.all()
-        name = kwargs.get("name", None)
+        name = kwargs.get("name")
         if name is not None:
             queryset = Roles.objects.filter(name=name)
         return queryset
@@ -73,7 +73,7 @@ class RolesDetailView(GenericAPIView):
         responses={status.HTTP_200_OK: None},
     )
     def delete(self, request, *args, **kwargs):
-        name = kwargs.get("name", None)
+        name = kwargs.get("name")
         instance = self.get_object()
         instance.delete()
         return Response(
