@@ -3,12 +3,6 @@ from drf_spectacular.utils import (
     OpenApiResponse,
     extend_schema,
 )
-from apps.auth.serializers import (
-    LoginRefreshSerializer,
-    LoginSerializer,
-    RegisterMailSerializer,
-    RegisterSerializer,
-)
 from rest_framework import status
 
 templates = {

@@ -1,13 +1,13 @@
-import pytest
-from apps.api.tokens import encode_token
-from django.db import connections
-import psycopg2
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-from config.settings.testing import env
-from django.core.management import call_command
-from config.env import BASE_DIR
 from pathlib import Path
+
+import psycopg2
+import pytest
+from config.env import BASE_DIR
+from config.settings.testing import env
 from django.conf import settings
+from django.core.management import call_command
+from django.db import connections
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 
 def run_sql(sql):
